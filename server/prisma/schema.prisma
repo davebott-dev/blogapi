@@ -13,8 +13,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Comment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  content   String?
+  likes     Int      @default(0)
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+}
+
+model Post {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  title     String    @db.VarChar(255)
+  content   String?
+  published Boolean   @default(false)
+  likes     Int       @default(0)
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String
+  comments  Comment[]
+}
+
 model User {
   id    String  @id @default(uuid())
   email String  @unique
   name  String?
+  posts Post[]
 }

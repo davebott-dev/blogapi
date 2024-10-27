@@ -1,6 +1,7 @@
 :root {
   --backgroundColor: #F9FAFB;
   --elementColor: #FFFF;
+  --altColor: #1C1917;
   --font: ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji"
 }
 #root{
@@ -17,7 +18,11 @@ html,body {
   font-family: var(--font);
 }
 .rootContainer,.indexContainer{
-  height: 100%;
+  height: inherit;
+}
+.rootContainer{
+  display: flex;
+  flex-direction: column;
 }
 
 .indexContainer{
@@ -36,6 +41,45 @@ html,body {
   padding: 1.5rem;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-radius: 10px;
+}
+.formContainer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: inherit;
+  
+}
+.formContainer>Form{
+  display: flex;
+  flex-direction: column;
+  background: var(--elementColor);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 10px;
+  padding: 1.5rem;
+  gap: 20px;
+  width: 100%;
+  max-width: 24rem;
+}
+span {
+  color: rgb(55 65 81);
+}
+.formContainer>Form>p {
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: rgb(31 41 55);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.formContainer>Form>div{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+input{
+  padding: .5rem .75rem .5rem .75rem;
+  border: 1px solid rgb(209 213 219);
+  border-radius: 0.5rem;
 }
 nav {
   display: flex;
@@ -60,5 +104,29 @@ nav>div:first-child>a:first-child{
 a {
   text-decoration: none;
   color: black;
+}
 
+button {
+  background: var(--altColor);
+  color: var(--elementColor);
+  border: none;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+}
+.error-page{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+footer{
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  width: 100%;
+  justify-content: center;
 }

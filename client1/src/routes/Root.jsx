@@ -1,4 +1,5 @@
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import '../App.css';
 
 const Root = () => {
@@ -6,16 +7,21 @@ const Root = () => {
     <div className= "rootContainer">
         <nav>
           <div>
-              <Link>Mojos Blog</Link>
-              <Link>Posts</Link>
-              <Link>Register</Link>
-              <Link>Login</Link>
+              <NavLink to="/">Mojos Blog</NavLink>
+              <NavLink to="posts">Posts</NavLink>
+              <NavLink to="register">Register</NavLink>
+              <NavLink to="login">Login</NavLink>
           </div>
           <div>
-              <Link>Logout</Link>
+              <NavLink to="logout">Logout</NavLink>
           </div>
         </nav>
         <Outlet/>
+
+        <footer>
+          <div>Made with ❤️ by David Bottenberg</div>
+          <a href="https://github.com/davebott-dev"><GitHubIcon/></a>
+        </footer>
     </div>
   );
 };

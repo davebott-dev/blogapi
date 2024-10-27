@@ -1,12 +1,12 @@
-import {Form,redirect} from 'react-router-dom';
 import '../App.css';
+
 
 const Register = () => {
 
     return (
         <div className = "formContainer">
             
-            <Form method= "post">
+            <form method= "post" action="/api">
             <p>Create Account</p>
                 <div>
                     <span>Name</span>
@@ -48,7 +48,7 @@ const Register = () => {
                 </div>
 
                 <button type="submit">Submit</button>
-            </Form>
+            </form>
         </div>
     )
 }

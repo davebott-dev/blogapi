@@ -1,9 +1,9 @@
-import { Form, redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   return (
     <div className="formContainer">
-      <Form method="post">
+      <form method="post" action="/api/log-in">
         <p>Login</p>
 
         <div>
@@ -27,8 +27,9 @@ const Login = () => {
             Don't have an account? <Link to="/register">Register here.</Link>
           </strong>
         </span>
-      </Form>
+      </form>
     </div>
   );
 };
 export default Login;
+ 

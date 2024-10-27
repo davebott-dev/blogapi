@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import {createBrowserRouter, RouterProvider} from 'react-router-dom'
+import {createBrowserRouter, RouterProvider, redirect} from 'react-router-dom'
 import Root from './routes/Root.jsx';
 import Index from './Index.jsx';
 import ErrorPage from './errorpage.jsx';
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       },
       {
         path:'/register',
-        element: <Register/>
+        element: <Register/>,
       },
       {
         path:'/login',

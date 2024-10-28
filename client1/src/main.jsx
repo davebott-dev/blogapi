@@ -1,11 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import {createBrowserRouter, RouterProvider, redirect} from 'react-router-dom'
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import Root from './routes/Root.jsx';
 import Index from './Index.jsx';
 import ErrorPage from './errorpage.jsx';
 import Register from './routes/Register.jsx';
 import Login from './routes/Login.jsx';
+import Posts from './routes/Posts.jsx';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +24,11 @@ const router = createBrowserRouter([
       },
       {
         path:'/login',
-        element: <Login/>
+        element: <Login/>,
+      },
+      {
+        path: '/posts',
+        element: <Posts/>,
       }
     ]
   }

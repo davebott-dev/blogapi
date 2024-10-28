@@ -6,7 +6,7 @@ const Register = () => {
     return (
         <div className = "formContainer">
             
-            <form method= "post" action="/api">
+            <form method= "POST" action="/api">
             <p>Create Account</p>
                 <div>
                     <span>Name</span>

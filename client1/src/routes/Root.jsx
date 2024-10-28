@@ -13,7 +13,7 @@ const Root = () => {
               <NavLink to="login">Login</NavLink>
           </div>
           <div>
-              <NavLink to="logout">Logout</NavLink>
+              <a href="/api/logout">Logout</a>
           </div>
         </nav>
         <Outlet/>

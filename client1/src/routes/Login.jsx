@@ -3,12 +3,18 @@ import { Link } from "react-router-dom";
 const Login = () => {
   return (
     <div className="formContainer">
-      <form method="post" action="/api/log-in">
+      <form method="POST" action="/api/log-in">
         <p>Login</p>
 
         <div>
           <span>Username</span>
-          <input type="text" placeholder="Username" name="username" required />
+          <input
+            type="text"
+            placeholder="Username"
+            name="username"
+            id="username"
+            required
+          />
         </div>
 
         <div>
@@ -16,6 +22,7 @@ const Login = () => {
           <input
             type="password"
             name="password"
+            id="password"
             placeholder="Password"
             required
           />
@@ -32,4 +39,3 @@ const Login = () => {
   );
 };
 export default Login;
- 

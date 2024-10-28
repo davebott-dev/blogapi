@@ -25,8 +25,8 @@ passport.use(
     return done(null, user);
   })
 );
-passport.serializeUser(async (id, done) => {
-  done(null, user, id);
+passport.serializeUser((user, done) => {
+  done(null, user.id);
 });
 passport.deserializeUser(async (id, done) => {
   const user = await prisma.user.findFirst({
@@ -48,9 +48,7 @@ router.post('/log-in',
         failureRedirect: 'http://localhost:5173/register'
     })
 );
-router.get("/", controller.getPosts);
+router.get('/logout', controller.logout);
 
 module.exports = router;
 
-//figure out why I cant authenticate user
-//use a main.js file to look into my prisma schema manually to check output

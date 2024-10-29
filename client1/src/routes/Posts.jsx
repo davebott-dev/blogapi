@@ -1,12 +1,11 @@
-const Posts = () => {
+import {useState, useEffect} from 'react';
 
+const Posts = () => {
+const [user,setUser] = useState([]);
 
     return (
-        <div>
-            Hello World from the posts section. 
-            Only authenticated and authorized users will be able to access
-            and comment on mojos blog posts....
-        </div>
+        (!user.username)? 
+        <p>Please log in</p> : null
     )
 }
 

@@ -10,19 +10,23 @@ const controller = require("../controllers/apiController");
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
-    const user = await prisma.user.findFirst({
+    try{
+      const user = await prisma.user.findFirst({
       where: {
         username,
       },
     });
     if (!user) {
-      return done(null, false, { message: "incorrect username" });
+      return done(null, false, { msg: "incorrect username" });
     }
     const match= await bcrypt.compare(password,user.password);
     if (!match) {
-      return done(null, false, { message: "incorrect password" });
+      return done(null, false, { msg: "incorrect password" });
     }
-    return done(null, user);
+    return done(null, user)
+  } catch (err) {
+    return done(err);
+  }
   })
 );
 passport.serializeUser((user, done) => {
@@ -42,13 +46,26 @@ router.use(
 router.use(passport.session());
 
 router.post('/',controller.createUser);
-router.post('/log-in', 
-    passport.authenticate('local', {
-        successRedirect: 'http://localhost:5173/posts',
-        failureRedirect: 'http://localhost:5173/register'
-    })
+router.post('/log-in', (req,res) => {
+  passport.authenticate('local', (err,user,info) => {
+    if(user) {
+      req.login(user, (error) => {
+        if(error) {
+          res.send(error);
+        } else {
+          console.log('success');
+          res.redirect('http://localhost:5173/posts');
+        };
+      });
+    }else {
+      console.log(info.msg);
+      res.redirect('http://localhost:5173/login');
+    };
+}) (req,res)
+}
 );
 router.get('/logout', controller.logout);
 
 module.exports = router;
 
+//figure out how to display error message

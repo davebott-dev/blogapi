@@ -64,6 +64,7 @@ router.post('/log-in', (req,res) => {
 }) (req,res)
 }
 );
+router.get('/',controller.getUser);
 router.get('/logout', controller.logout);
 
 module.exports = router;

@@ -6,6 +6,10 @@ module.exports= {
     getPosts: async(req,res) => {
         res.send("hello world");
     },
+    getUser: async(req,res) => {
+        const user = req.user;
+        res.json(user)
+    },
     createUser: async(req,res)=> {
         const username = req.body.username;
         const prev= req.body.password;
@@ -31,4 +35,5 @@ module.exports= {
             res.redirect('http://localhost:5173')
         })
     },
+    
 }

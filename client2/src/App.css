@@ -89,23 +89,19 @@ nav {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   background: var(--elementColor);
 }
-
 nav div {
   display: flex;
   gap: 25px;
   padding: 25px;
 }
-
 nav>div:first-child>a:first-child{
   font-size:larger;
   font-weight: bolder;
 }
-
 a {
   text-decoration: none;
   color: black;
 }
-
 button {
   background: var(--altColor);
   color: var(--elementColor);
@@ -135,7 +131,6 @@ footer{
   display: flex;
   flex-direction: row;
   justify-content: center;
-  
 }
 .loginMessage {
   border: 1px solid red;
@@ -148,4 +143,21 @@ footer{
 }
 .link {
   color: #DC2626;
+}
+#editorForm {
+  display: flex;
+  flex-direction: column;
+  padding: 50px 25% 50px 25%;
+  gap: 25px;
+  width: 100%;
+}
+#editorForm>div:nth-child(-n+2) {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  gap: 5px;
+}
+textarea{
+  min-width: 100%;
+  min-height: 350px;
 }

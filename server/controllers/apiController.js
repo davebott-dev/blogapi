@@ -27,6 +27,32 @@ module.exports= {
             }
         })
     },
+    upload: async(req,res)=> {
+        const user = req.user.id;
+        const data = req.file.buffer;
+        const title = req.body.title;
+        const content = req.body.content;
+        let isPublished=null;
+        req.body.isPublished =="Yes" ? isPublished=true : isPublished=false;
+
+        try {
+            const newUpload = await prisma.post.create({
+            data:{
+                title:title,
+                content:content,
+                published: isPublished,
+                data: data,
+                authorId: user,             
+            }
+        });
+        if(!response.ok) {
+            throw new Error('failed');
+        }
+        res.redirect('http://localhost:5173/posts');
+    } catch(err) {
+        res.send(err);
+    }
+    },
     logout: async(req,res) => {
         req.logout((err)=> {
             if(err) {

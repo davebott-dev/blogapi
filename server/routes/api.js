@@ -6,6 +6,8 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
+const upload =multer();
 const controller = require("../controllers/apiController");
 
 passport.use(
@@ -65,6 +67,7 @@ router.post('/log-in', (req,res) => {
 }
 );
 router.get('/',controller.getUser);
+router.post('/upload',upload.single('file'),controller.upload);
 router.get('/logout', controller.logout);
 
 module.exports = router;

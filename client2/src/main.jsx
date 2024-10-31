@@ -5,6 +5,7 @@ import Root from './routes/Root.jsx';
 import Index from './Index.jsx';
 import ErrorPage from './errorpage.jsx';
 import Home from './routes/Home.jsx';
+import Editor from './routes/Editor.jsx';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
         path:'/home',
         element: <Home/>,
       },
+      {
+        path: '/posts',
+        element: <Editor/>,
+      }
     ]
   }
 ])

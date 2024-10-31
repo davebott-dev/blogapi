@@ -3,7 +3,12 @@ const prisma = new PrismaClient();
 
 
 const main = async () => {
-    const user = await prisma.user.findMany({});
+    const user = await prisma.user.findMany({
+
+        include: {
+            posts:true,
+        }
+    });
 
     console.dir(user, {depth:null});
     

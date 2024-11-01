@@ -4,7 +4,8 @@ const bcrypt = require('bcryptjs');
 
 module.exports= {
     getPosts: async(req,res) => {
-        res.send("hello world");
+        const posts = await prisma.post.findMany({});
+        res.json(posts);
     },
     getUser: async(req,res) => {
         const user = req.user;

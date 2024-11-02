@@ -19,14 +19,18 @@ const Editor = () => {
 
           <div>
             <label htmlFor="file">Upload an image:</label>
-            <input type="file" name="file" id="file" accept=" image/*" />
+            <input
+              type="file"
+              name="file"
+              id="file"
+              accept=" image/*"
+            />
           </div>
-
+         
           <textarea name="content" defaultValue="type here" />
-
-
-          <span>Do you want this post to be visible to the public?</span>
           
+          <span>Do you want this post to be visible to the public?</span>
+
           <div>
             <div>
               <input type="radio" id="radio1" name="isPublished" value="Yes" />
@@ -52,3 +56,5 @@ const Editor = () => {
 };
 
 export default Editor;
+
+//give a response when upload is successful or unsuccessful

@@ -1,6 +1,15 @@
+require('dotenv').config();
 const {PrismaClient}= require('@prisma/client');
 const prisma = new PrismaClient();
 const bcrypt = require('bcryptjs');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: 'da91cn8sj',
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+  secure: true,
+});
 
 module.exports= {
     getPosts: async(req,res) => {
@@ -30,29 +39,32 @@ module.exports= {
     },
     upload: async(req,res)=> {
         const user = req.user.id;
-        const data = req.file.buffer;
         const title = req.body.title;
         const content = req.body.content;
         let isPublished=null;
         req.body.isPublished =="Yes" ? isPublished=true : isPublished=false;
-
-        try {
+        const imgUpload = await cloudinary.uploader.upload(req.file.path, {
+            transformation: [
+                {
+                    width:400,
+                    height:400
+                }
+            ]
+        });
+        const url = cloudinary.url(imgUpload.public_id)
             const newUpload = await prisma.post.create({
             data:{
                 title:title,
                 content:content,
                 published: isPublished,
-                data: data,
+                data: url,
                 authorId: user,             
             }
         });
-        if(!response.ok) {
-            throw new Error('failed');
-        }
+        console.log(newUpload)
+        
         res.redirect('http://localhost:5173/posts');
-    } catch(err) {
-        res.send(err);
-    }
+    
     },
     logout: async(req,res) => {
         req.logout((err)=> {

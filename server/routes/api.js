@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
@@ -7,7 +8,12 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
-const upload =multer();
+const storage = multer.diskStorage({
+  destination: (req,file,cb) => {
+    cb(null, './uploads')
+  },
+});
+const upload = multer({storage:storage});
 const controller = require("../controllers/apiController");
 
 passport.use(

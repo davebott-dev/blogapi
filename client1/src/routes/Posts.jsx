@@ -17,49 +17,31 @@ const Posts = () => {
     };
     fetchData();
   }, []);
-
+console.log(posts)
   return user.name? (
     <div className="postContainer">
       {posts.map((post,index)=> {
-        const handleURL = () => {
-          const blob = new Blob([post.data.data], {
-            type: "application/octet-stream",
-          });
-          const fileReader=  new FileReader();
-          //figure out how to render the image upload file in the frontend
-          
-        }
         return (
         <div key={index}>
         <div>{post.title}</div>
-        <div><img src="#" /></div>
+        <div><img src={post.data} /></div>
         <div>{post.content}</div>
         <div>{post.likes}</div>
         <div>{post.createdAt}</div>    
-        <button onClick={handleURL}>Click</button>    
         </div>
       )})}
     </div>
   ) : 
-  <div className="loginMessage">
-    <Link to="/login" className="link">
-      Please Login First
-    </Link>
+
+  <div className="postContainer">
+    <div className="loginMessage">
+      <Link to="/login" className="link">
+        Please Login First
+      </Link>
+    </div>
   </div>
 };
 
 export default Posts;
 
-// return (
-//   <div className="postContainer">
-//     {user.name ? (
-//       <h1>Welcome {user.name}</h1>
-//     ) : (
-//       <div className="loginMessage">
-//         <Link to="/login" className="link">
-//           Please Login First
-//         </Link>
-//       </div>
-//     )}
-//   </div>
-// );
+

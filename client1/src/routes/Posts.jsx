@@ -1,9 +1,15 @@
-import { Link,useOutletContext } from "react-router-dom";
-import {useEffect} from 'react';
-import { Avatar } from "@mui/material";
+import { Link, useOutletContext } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Avatar,IconButton } from "@mui/material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import CommentIcon from '@mui/icons-material/Comment';
+import {pink} from '@mui/material/colors';
+import moment from "moment";
 
 const Posts = () => {
-  const [user,posts,setUser,setPosts] = useOutletContext();
+  const [user, posts, setUser, setPosts] = useOutletContext();
+  const [isLiked, setIsLiked] = useState(false);
+  const [action,setAction] = useState("/api/like/")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,30 +28,53 @@ const Posts = () => {
     <>
       <div>
         <div>
-          <Avatar src={user.Profile.picture}/>
+          <Avatar src={user.Profile.picture} />
         </div>
         <div>Welcome {user.name}</div>
       </div>
       <div className="postContainer">
         {posts.map((post, index) => {
+            const handleLike = ()=> {
+              if(!isLiked) {
+                setIsLiked(true);
+                setAction(action+post.id)
+              }
+            }
           return (
             <div key={index} className="card">
               <div>
-                <Avatar src={post.author.Profile.picture}/>
+                <Avatar
+                  src={post.author.Profile.picture}
+                  sx={{ width: 50, height: 50 }}
+                />
                 <div>
-                  <div>{post.author.username}</div>
-                  <div>{post.createdAt}</div>
+                  <div className="username">
+                    <strong>{post.author.username}</strong>
+                  </div>
+                  <div className="date">
+                    {moment(post.createdAt).format("MMM Do YYYY, h:mm a")}
+                  </div>
                 </div>
               </div>
-              <div>{post.title}</div>
-              <div>
-                <img src={post.data} />
+              <div id="title"><strong>{post.title}</strong></div>
+              <img src={post.data} />
+              <div id = "content">{post.content}</div>
+              <div className="toolbar">
+                <form id ="likeForm" action ={action} method = "POST">
+                  <button id="like">
+                    <IconButton onClick={handleLike}>
+                    {isLiked? <FavoriteIcon sx={{color:pink[500]}}/> : <FavoriteIcon/>}
+                    </IconButton>
+                  </button>
+                  <div>{post.likes}</div>
+                </form>
+                <IconButton><CommentIcon/></IconButton>
               </div>
-              <div>{post.content}</div>
-              <div>Likes: {post.likes}</div>
               <div className="commentSection"></div>
-              <textarea></textarea>
-              <button>Comment</button>
+              <form id="commentForm" action="#" method="POST">
+                <textarea></textarea>
+                <button>Comment</button>
+              </form>
             </div>
           );
         })}

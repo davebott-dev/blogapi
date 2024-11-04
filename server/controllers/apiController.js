@@ -100,5 +100,19 @@ module.exports= {
             res.redirect('http://localhost:5173')
         })
     },
-    
+    like: async(req,res)=> {
+      
+        const incrememnt = await prisma.post.update({
+            where:{
+                id: req.params.postId
+            },
+            data:{
+                likes: {
+                    increment:1
+                }
+            }
+        });
+        res.redirect('http://localhost:5173/posts');
+    }
+    //make it so the user can only like a post one time 
 }

@@ -144,6 +144,7 @@ footer{
   flex-direction: column;
   justify-content: center;
   width: 40%;
+  gap: 10px;
 }
 .card>div:first-child{
   display: flex;
@@ -161,4 +162,35 @@ footer{
 }
 .link {
   color: #DC2626;
+}
+.date {
+  font-size: 15px;
+  font-style: italic;
+  color: #202124;
+}
+.username {
+  font-size: large;
+}
+#title{
+  font-size: larger;
+  padding: 1rem;
+}
+#content {
+  color: #202124;
+}
+#like{
+  background: none;
+  padding: 0px;
+  cursor: pointer;
+}
+#likeForm {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.toolbar{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
 }

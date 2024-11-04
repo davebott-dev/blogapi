@@ -74,6 +74,7 @@ router.post('/log-in', (req,res) => {
 );
 router.get('/',controller.getUser);
 router.get('/posts', controller.getPosts);
+router.post('/like/:postId',controller.like)
 router.post('/upload',upload.single('file'),controller.upload);
 router.get('/logout', controller.logout);
 

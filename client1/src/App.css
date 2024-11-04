@@ -131,11 +131,24 @@ footer{
   justify-content: center;
 }
 .postContainer {
-  height: 100%;
+  height: auto;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+}
+.card {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  
+  width: 40%;
+}
+.card>div:first-child{
+  display: flex;
+  flex-wrap: row;
+  gap: 15px;
 }
 .loginMessage {
   border: 1px solid red;

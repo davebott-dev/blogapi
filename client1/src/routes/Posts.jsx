@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link,useOutletContext } from "react-router-dom";
+import {useEffect} from 'react';
+import { Avatar } from "@mui/material";
 
 const Posts = () => {
-  const [user, setUser] = useState([]);
-  const [posts, setPosts] = useState([]);
+  const [user,posts,setUser,setPosts] = useOutletContext();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,31 +17,49 @@ const Posts = () => {
     };
     fetchData();
   }, []);
-console.log(posts)
-  return user.name? (
-    <div className="postContainer">
-      {posts.map((post,index)=> {
-        return (
-        <div key={index}>
-        <div>{post.title}</div>
-        <div><img src={post.data} /></div>
-        <div>{post.content}</div>
-        <div>{post.likes}</div>
-        <div>{post.createdAt}</div>    
-        </div>
-      )})}
-    </div>
-  ) : 
 
-  <div className="postContainer">
-    <div className="loginMessage">
-      <Link to="/login" className="link">
-        Please Login First
-      </Link>
+  return user.name ? (
+    <>
+      <div>
+        <div>
+          <Avatar src={user.Profile.picture}/>
+        </div>
+        <div>Welcome {user.name}</div>
+      </div>
+      <div className="postContainer">
+        {posts.map((post, index) => {
+          return (
+            <div key={index} className="card">
+              <div>
+                <Avatar src={post.author.Profile.picture}/>
+                <div>
+                  <div>{post.author.username}</div>
+                  <div>{post.createdAt}</div>
+                </div>
+              </div>
+              <div>{post.title}</div>
+              <div>
+                <img src={post.data} />
+              </div>
+              <div>{post.content}</div>
+              <div>Likes: {post.likes}</div>
+              <div className="commentSection"></div>
+              <textarea></textarea>
+              <button>Comment</button>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  ) : (
+    <div className="postContainer">
+      <div className="loginMessage">
+        <Link to="/login" className="link">
+          Please Login First
+        </Link>
+      </div>
     </div>
-  </div>
+  );
 };
 
 export default Posts;
-
-

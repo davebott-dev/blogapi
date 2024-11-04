@@ -3,14 +3,14 @@ const prisma = new PrismaClient();
 
 
 const main = async () => {
-    // const user = await prisma.user.findMany({
-    //     include:{
-    //         posts:true
-    //     }
-    // });
-    const posts = await prisma.post.deleteMany({})
+    const user = await prisma.user.findMany({
+        include:{
+            posts:true,
+            Profile:true,
+        }
+    })
 
-    console.dir(posts, {depth:null});
+    console.dir(user, {depth:null});
     
 };
 

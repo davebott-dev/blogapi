@@ -36,10 +36,19 @@ model Post {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
+  id       String    @id @default(uuid())
+  email    String    @unique
   name     String?
-  username String  @unique
+  username String    @unique
   password String
   posts    Post[]
+  Profile  Profile[]
+}
+
+model Profile {
+  id      String  @id @default(uuid())
+  bio     String?
+  picture String? @default("https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper-thumbnail.png")
+  user    User    @relation(fields: [userId], references: [id])
+  userId  String  @unique
 }

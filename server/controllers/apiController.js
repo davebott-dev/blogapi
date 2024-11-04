@@ -12,13 +12,29 @@ cloudinary.config({
 });
 
 module.exports= {
-    getPosts: async(req,res) => {
-        const posts = await prisma.post.findMany({});
-        res.json(posts);
-    },
     getUser: async(req,res) => {
-        const user = req.user;
-        res.json(user)
+        const user = await prisma.user.findFirst({
+            where: {
+                id:req.user.id,
+            },
+            include: {
+                posts: true,
+                Profile: true,
+            }
+        });
+        res.json(user);
+    },
+    getPosts: async(req,res)=> {
+            const posts = await prisma.post.findMany({
+        include: {
+            author:{
+                include: {
+                    Profile:true,
+                }
+            }
+        }
+    });
+    res.json(posts);
     },
     createUser: async(req,res)=> {
         const username = req.body.username;
@@ -31,7 +47,17 @@ module.exports= {
                 console.error(err);
             } else {
                 const newUser = await prisma.user.create({
-                    data:{email,name,username,password}
+                    data:{
+                        email:email,
+                        name:name,
+                        username:username,
+                        password:password,
+                        Profile: {
+                            create:{
+
+                            }
+                        }
+                    }
                 });
                 res.redirect('http://localhost:5173/login');
             }

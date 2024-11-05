@@ -1,15 +1,14 @@
 import { Link, useOutletContext } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Avatar,IconButton } from "@mui/material";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import CommentIcon from '@mui/icons-material/Comment';
-import {pink} from '@mui/material/colors';
+import { Avatar, IconButton } from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import CommentIcon from "@mui/icons-material/Comment";
+import { pink } from "@mui/material/colors";
 import moment from "moment";
 
 const Posts = () => {
   const [user, posts, setUser, setPosts] = useOutletContext();
-  const [isLiked, setIsLiked] = useState(false);
-  const [action,setAction] = useState("/api/like/")
+  const [action, setAction] = useState("/api/like/");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +22,7 @@ const Posts = () => {
     };
     fetchData();
   }, []);
-
+  console.log(posts);
   return user.name ? (
     <>
       <div>
@@ -34,12 +33,9 @@ const Posts = () => {
       </div>
       <div className="postContainer">
         {posts.map((post, index) => {
-            const handleLike = ()=> {
-              if(!isLiked) {
-                setIsLiked(true);
-                setAction(action+post.id)
-              }
-            }
+          const handleLike = () => {
+            setAction(action + post.id);
+          };
           return (
             <div key={index} className="card">
               <div>
@@ -56,24 +52,36 @@ const Posts = () => {
                   </div>
                 </div>
               </div>
-              <div id="title"><strong>{post.title}</strong></div>
+              <div id="title">
+                <strong>{post.title}</strong>
+              </div>
               <img src={post.data} />
-              <div id = "content">{post.content}</div>
+              <div id="content">{post.content}</div>
               <div className="toolbar">
-                <form id ="likeForm" action ={action} method = "POST">
+                <form id="likeForm" action={action} method="POST">
                   <button id="like">
                     <IconButton onClick={handleLike}>
-                    {isLiked? <FavoriteIcon sx={{color:pink[500]}}/> : <FavoriteIcon/>}
+                      {user.Likes.find((like) => like.postId == post.id) ? (
+                        <FavoriteIcon sx={{ color: pink[500] }} />
+                      ) : (
+                        <FavoriteIcon />
+                      )}
                     </IconButton>
                   </button>
-                  <div>{post.likes}</div>
+                  <div>{post.likes.length}</div>
                 </form>
-                <IconButton><CommentIcon/></IconButton>
+                <IconButton>
+                  <CommentIcon />
+                </IconButton>
               </div>
               <div className="commentSection"></div>
               <form id="commentForm" action="#" method="POST">
-                <textarea></textarea>
-                <button>Comment</button>
+                <textarea
+                  id="commentBox"
+                  name="comment"
+                  defaultValue="Leave a comment"
+                ></textarea>
+                <button id="commentBtn">Comment</button>
               </form>
             </div>
           );

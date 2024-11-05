@@ -28,11 +28,21 @@ model Post {
   title     String    @db.VarChar(255)
   content   String?
   published Boolean   @default(false)
-  likes     Int       @default(0)
   data      String?
   author    User      @relation(fields: [authorId], references: [id])
   authorId  String
   comments  Comment[]
+  likes     Likes[]
+}
+
+model Likes {
+  id     String  @id @default(uuid())
+  author User    @relation(fields: [userId], references: [id])
+  Post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
+  userId String
+
+  @@unique([postId, userId])
 }
 
 model User {
@@ -43,6 +53,7 @@ model User {
   password String
   posts    Post[]
   Profile  Profile[]
+  Likes    Likes[]
 }
 
 model Profile {

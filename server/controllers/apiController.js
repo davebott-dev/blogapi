@@ -20,6 +20,7 @@ module.exports= {
             include: {
                 posts: true,
                 Profile: true,
+                Likes:true,
             }
         });
         res.json(user);
@@ -27,6 +28,7 @@ module.exports= {
     getPosts: async(req,res)=> {
             const posts = await prisma.post.findMany({
         include: {
+            likes: true,
             author:{
                 include: {
                     Profile:true,
@@ -101,18 +103,22 @@ module.exports= {
         })
     },
     like: async(req,res)=> {
-      
-        const incrememnt = await prisma.post.update({
-            where:{
-                id: req.params.postId
-            },
-            data:{
-                likes: {
-                    increment:1
-                }
+        const id = req.user.id;
+        const postId = req.params.postId;
+
+        try{
+            const newLike = await prisma.likes.create({
+            data: {
+                postId:postId,
+                userId:id
             }
-        });
+        })} catch(err) {
+            if(err.code==="P2002") {
+                console.log('the post has already been liked by you');
+            } else {
+                throw err;
+            }
+        }
         res.redirect('http://localhost:5173/posts');
     }
-    //make it so the user can only like a post one time 
 }

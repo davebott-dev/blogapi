@@ -151,6 +151,14 @@ footer{
   flex-wrap: row;
   gap: 15px;
 }
+#commentForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+#commentForm>textarea {
+  height: 70px;
+}
 .loginMessage {
   border: 1px solid red;
   width: fit-content;

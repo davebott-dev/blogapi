@@ -11,8 +11,15 @@ const [user,posts] = useOutletContext();
           <div>{user.email}</div>
           <div>{user.Profile.bio}</div>
 
-          <form>
-            <textarea></textarea>
+          <form action = "#" method="POST">
+            <label htmlFor="profileImg">Upload an image:</label>
+            <input
+              type="file"
+              name="profileImg"
+              id="profileImg"
+              accept=" image/*"
+            />
+            <textarea defaultValue="write a bio..."></textarea>
             <button>Update</button>
           </form>
         </div>
@@ -20,3 +27,6 @@ const [user,posts] = useOutletContext();
 }
 
 export default Profile;
+
+//allow user to customize their profile...change image and add bio
+//add a route in backend for this + create a prisma function for updating user profile data

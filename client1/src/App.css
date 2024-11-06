@@ -131,11 +131,10 @@ footer{
   justify-content: center;
 }
 .postContainer {
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 50px;
+  display: grid;
+  grid-template-columns:repeat(auto-fit,minmax(750px,1fr));
+  grid-gap: 40px;
+  padding: 25px;
 }
 .card {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -143,7 +142,6 @@ footer{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 40%;
   gap: 10px;
 }
 .card>div:first-child{
@@ -201,4 +199,26 @@ footer{
   flex-direction: row;
   align-items: center;
   gap: 5px;
+}
+.commentSection{
+  background: lightgoldenrodyellow;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.commentSection>div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap:10px;
+}
+#header {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  gap: 10px;
+  font-weight: bolder;
+  font-size: large;
 }

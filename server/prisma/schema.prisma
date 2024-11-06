@@ -19,7 +19,9 @@ model Comment {
   content   String?
   likes     Int      @default(0)
   post      Post     @relation(fields: [postId], references: [id])
+  author    User     @relation(fields: [userId], references: [id])
   postId    String
+  userId    String
 }
 
 model Post {
@@ -54,6 +56,7 @@ model User {
   posts    Post[]
   Profile  Profile[]
   Likes    Likes[]
+  Comment  Comment[]
 }
 
 model Profile {

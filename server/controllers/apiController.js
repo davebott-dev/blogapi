@@ -29,6 +29,15 @@ module.exports= {
             const posts = await prisma.post.findMany({
         include: {
             likes: true,
+            comments: {
+                include: {
+                    author: {
+                        include: {
+                            Profile:true,
+                        }
+                    }
+                }
+            },
             author:{
                 include: {
                     Profile:true,
@@ -119,6 +128,20 @@ module.exports= {
                 throw err;
             }
         }
+        res.redirect('http://localhost:5173/posts');
+    },
+    comment: async(req,res)=> {
+        const postId = req.params.postId;
+        const comment = req.body.comment;
+        const userId = req.user.id;
+
+        const newComment = await prisma.comment.create({
+            data:{
+                content:comment,
+                postId:postId,
+                userId:userId,
+            }
+        });
         res.redirect('http://localhost:5173/posts');
     }
 }

@@ -8,7 +8,8 @@ import moment from "moment";
 
 const Posts = () => {
   const [user, posts, setUser, setPosts] = useOutletContext();
-  const [action, setAction] = useState("/api/like/");
+  const [likeAction, setLikeAction] = useState("/api/like/");
+  const [commentAction, setCommentAction] = useState("/api/comment/");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,23 +26,26 @@ const Posts = () => {
   console.log(posts);
   return user.name ? (
     <>
-      <div>
+      <div id="header">
         <div>
-          <Avatar src={user.Profile.picture} />
+          <Avatar src={user.Profile.picture} sx={{ width: 100, height: 100 }} />
         </div>
         <div>Welcome {user.name}</div>
       </div>
       <div className="postContainer">
         {posts.map((post, index) => {
           const handleLike = () => {
-            setAction(action + post.id);
+            setLikeAction(likeAction + post.id);
+          };
+          const handleComment = () => {
+            setCommentAction(commentAction + post.id);
           };
           return (
             <div key={index} className="card">
               <div>
                 <Avatar
                   src={post.author.Profile.picture}
-                  sx={{ width: 50, height: 50 }}
+                  sx={{ width: 75, height: 75 }}
                 />
                 <div>
                   <div className="username">
@@ -58,7 +62,7 @@ const Posts = () => {
               <img src={post.data} />
               <div id="content">{post.content}</div>
               <div className="toolbar">
-                <form id="likeForm" action={action} method="POST">
+                <form id="likeForm" action={likeAction} method="POST">
                   <button id="like">
                     <IconButton onClick={handleLike}>
                       {user.Likes.find((like) => like.postId == post.id) ? (
@@ -73,15 +77,46 @@ const Posts = () => {
                 <IconButton>
                   <CommentIcon />
                 </IconButton>
+                <div>{post.comments.length}</div>
               </div>
-              <div className="commentSection"></div>
-              <form id="commentForm" action="#" method="POST">
+              {post.comments.map((comment, i) => (
+                <div className="commentSection" key={i}>
+                  <div>
+                    <Avatar
+                      src={comment.author.Profile.picture}
+                      sx={{ width: 50, height: 50 }}
+                    />
+                    <div>
+                      <div className="username">
+                        <strong>{comment.author.username}</strong>
+                      </div>
+                      <div className="date">
+                        <em>
+                          {moment(comment.createdAt).format(
+                            "MMM Do YYYY, h:mm a"
+                          )}
+                        </em>
+                      </div>
+                    </div>
+                  </div>
+                  <div>{comment.content}</div>
+                  <div>
+                    <IconButton>
+                      <FavoriteIcon />
+                    </IconButton>
+                    <div>{comment.likes}</div>
+                  </div>
+                </div>
+              ))}
+              <form id="commentForm" action={commentAction} method="POST">
                 <textarea
                   id="commentBox"
                   name="comment"
                   defaultValue="Leave a comment"
                 ></textarea>
-                <button id="commentBtn">Comment</button>
+                <button onClick={handleComment} id="commentBtn">
+                  Comment
+                </button>
               </form>
             </div>
           );
@@ -98,5 +133,9 @@ const Posts = () => {
     </div>
   );
 };
-
+//conditionally show the posts tab when user logs in
+//add like funcationality to the comment section
+//figure out how to implement jwt w/passport
+//add material ui menu (3 dots) icon that allows users to delete their own post
+//when user clicks the comment button it automatically focuses on comment box
 export default Posts;

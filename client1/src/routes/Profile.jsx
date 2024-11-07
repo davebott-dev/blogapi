@@ -1,18 +1,32 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Avatar } from "@mui/material";
 import { useOutletContext } from "react-router-dom";
 
 const Profile = () => {
-  const [user, posts] = useOutletContext();
+  const [user, posts, setUser,setPosts] = useOutletContext();
   const [action, setAction] = useState("/api/profile/");
+  const [loading,setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const response1 = await fetch("/api");
+      const data1 = await response1.json();
+      setUser(data1);
+      setLoading(false);
+    };
+    fetchData();
+  }, [setUser]);
 
   const handleAction = () => {
     setAction(action + user.id);
   };
   return (
     <div id="profilePage">
+      {!user.Profile ? <p>Please Wait...</p> :
+    <>
       <div>
-        <Avatar src={user.Profile.picture} sx={{ width: 200, height: 200 }} />
+        <Avatar src={user.Profile[0].picture}  sx={{ width: 200, height: 200 }} />
         <div>
           <strong>Name: </strong>
           {user.name}
@@ -27,7 +41,7 @@ const Profile = () => {
         </div>
         <div>
           <strong>Bio: </strong>
-          {user.Profile.bio}
+          {user.Profile[0].bio}
         </div>
       </div>
 
@@ -40,13 +54,15 @@ const Profile = () => {
         <label htmlFor="profileImg">Upload an image:</label>
         <input
           type="file"
-          name="profileImg"
+          name="file"
           id="profileImg"
           accept=" image/*"
         />
         <textarea defaultValue="write a bio..." name="bio"></textarea>
         <button onClick={handleAction}>Update</button>
       </form>
+      </>
+}
     </div>
   );
 };

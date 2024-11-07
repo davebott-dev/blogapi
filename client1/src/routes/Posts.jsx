@@ -28,7 +28,7 @@ const Posts = () => {
     <>
       <div id="header">
         <div>
-          <Avatar src={user.Profile.picture} sx={{ width: 100, height: 100 }} />
+          <Avatar src={user.Profile[0].picture} sx={{ width: 100, height: 100 }} />
         </div>
         <div>Welcome {user.name}</div>
       </div>
@@ -44,7 +44,7 @@ const Posts = () => {
             <div key={index} className="card">
               <div>
                 <Avatar
-                  src={post.author.Profile.picture}
+                  src={post.author.Profile[0].picture}
                   sx={{ width: 75, height: 75 }}
                 />
                 <div>
@@ -83,7 +83,7 @@ const Posts = () => {
                 <div className="commentSection" key={i}>
                   <div>
                     <Avatar
-                      src={comment.author.Profile.picture}
+                      src={comment.author.Profile[0].picture}
                       sx={{ width: 50, height: 50 }}
                     />
                     <div>

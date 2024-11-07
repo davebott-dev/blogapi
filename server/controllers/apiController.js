@@ -147,9 +147,29 @@ module.exports= {
     updateProfile: async(req,res) => {
         const userId = req.params.userId;
         const bio = req.body.bio;
-        console.log(req.file)
-     
+        const imgUpload = await cloudinary.uploader.upload(req.file.path, {
+            transformation: [
+                {
+                    width:400,
+                    height:400
+                }
+            ]
+        });
+        const url = cloudinary.url(imgUpload.public_id);
 
+        try {
+            const update = await prisma.profile.update({
+            where: {
+                userId,
+            },
+            data: {
+                bio: bio,
+                picture:url,
+            }
+        }); 
+     } catch (err) {
+        console.log(err)
+     }
      
         res.redirect('http://localhost:5173/profile');
     }

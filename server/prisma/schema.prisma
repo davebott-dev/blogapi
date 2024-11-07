@@ -14,15 +14,27 @@ datasource db {
 }
 
 model Comment {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
+  id        String         @id @default(uuid())
+  createdAt DateTime       @default(now())
   content   String?
-  likes     Int      @default(0)
-  post      Post     @relation(fields: [postId], references: [id])
-  author    User     @relation(fields: [userId], references: [id])
+  likes     CommentLikes[]
+  post      Post           @relation(fields: [postId], references: [id])
+  author    User           @relation(fields: [userId], references: [id])
   postId    String
   userId    String
 }
+
+model CommentLikes {
+  id        String   @id @default(uuid())
+  author    User     @relation(fields: [userId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String?
+  userId    String
+
+  @@unique([userId, commentId])
+}
+
+//delete all current files and migrate this after work
 
 model Post {
   id        String    @id @default(uuid())
@@ -48,15 +60,16 @@ model Likes {
 }
 
 model User {
-  id       String    @id @default(uuid())
-  email    String    @unique
-  name     String?
-  username String    @unique
-  password String
-  posts    Post[]
-  Profile  Profile[]
-  Likes    Likes[]
-  Comment  Comment[]
+  id           String         @id @default(uuid())
+  email        String         @unique
+  name         String?
+  username     String         @unique
+  password     String
+  posts        Post[]
+  Profile      Profile[]
+  Likes        Likes[]
+  Comment      Comment[]
+  CommentLikes CommentLikes[]
 }
 
 model Profile {

@@ -143,5 +143,14 @@ module.exports= {
             }
         });
         res.redirect('http://localhost:5173/posts');
+    },
+    updateProfile: async(req,res) => {
+        const userId = req.params.userId;
+        const bio = req.body.bio;
+        console.log(req.file)
+     
+
+     
+        res.redirect('http://localhost:5173/profile');
     }
 }

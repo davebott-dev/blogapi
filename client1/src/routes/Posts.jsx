@@ -138,4 +138,5 @@ const Posts = () => {
 //figure out how to implement jwt w/passport
 //add material ui menu (3 dots) icon that allows users to delete their own post
 //when user clicks the comment button it automatically focuses on comment box
+//blend client 2 and client1 together 
 export default Posts;

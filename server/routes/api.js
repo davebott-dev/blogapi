@@ -66,7 +66,8 @@ router.post('/log-in', (req,res) => {
         };
       });
     }else {
-      res.redirect('http://localhost:5173/errorpage');
+      console.log(info.msg)
+      res.redirect('http://localhost:5173/register');
     };
 }) (req,res)
 }

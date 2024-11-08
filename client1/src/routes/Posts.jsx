@@ -108,7 +108,7 @@ const Posts = () => {
                   <form id="likeForm" action={commentLikeAction} method="POST">
                   <button id="like">
                     <IconButton onClick={handleCommentLike}>
-                      {comment.likes.find((like) => like.commentId == comment.id) ? (
+                      {comment.likes.find((like) => like.userId == user.id) ? (
                         <FavoriteIcon sx={{ color: pink[500] }} />
                       ) : (
                         <FavoriteIcon />

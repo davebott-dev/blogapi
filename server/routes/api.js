@@ -66,15 +66,16 @@ router.post('/log-in', (req,res) => {
         };
       });
     }else {
-      console.log(info.msg);
-      res.redirect('http://localhost:5173/login');
+      res.redirect('http://localhost:5173/errorpage');
     };
 }) (req,res)
 }
+//figure out how to display error message in the front end
 );
 router.get('/',controller.getUser);
 router.get('/posts', controller.getPosts);
 router.post('/like/:postId',controller.like);
+router.post('/comment/like/:commentId',controller.likeComment);
 router.post('/comment/:postId',controller.comment);
 router.post('/profile/:userId',upload.single('file'),controller.updateProfile);
 router.post('/upload',upload.single('file'),controller.upload);

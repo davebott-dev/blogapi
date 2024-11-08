@@ -34,8 +34,6 @@ model CommentLikes {
   @@unique([userId, commentId])
 }
 
-//delete all current files and migrate this after work
-
 model Post {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now())

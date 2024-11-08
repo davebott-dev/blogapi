@@ -10,6 +10,7 @@ const Posts = () => {
   const [user, posts, setUser, setPosts] = useOutletContext();
   const [likeAction, setLikeAction] = useState("/api/like/");
   const [commentAction, setCommentAction] = useState("/api/comment/");
+  const [commentLikeAction, setCommentLikeAction] = useState("/api/comment/like/");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,7 +80,11 @@ const Posts = () => {
                 </IconButton>
                 <div>{post.comments.length}</div>
               </div>
-              {post.comments.map((comment, i) => (
+              {post.comments.map((comment, i) => {
+                const handleCommentLike =() => {
+                  setCommentLikeAction(commentLikeAction+comment.id);
+                }
+              return (
                 <div className="commentSection" key={i}>
                   <div>
                     <Avatar
@@ -100,14 +105,21 @@ const Posts = () => {
                     </div>
                   </div>
                   <div>{comment.content}</div>
-                  <div>
-                    <IconButton>
-                      <FavoriteIcon />
+                  <form id="likeForm" action={commentLikeAction} method="POST">
+                  <button id="like">
+                    <IconButton onClick={handleCommentLike}>
+                      {comment.likes.find((like) => like.commentId == comment.id) ? (
+                        <FavoriteIcon sx={{ color: pink[500] }} />
+                      ) : (
+                        <FavoriteIcon />
+                      )}
                     </IconButton>
-                    <div>{comment.likes}</div>
-                  </div>
+                  </button>
+                  <div>{comment.likes.length}</div>
+                </form>
                 </div>
-              ))}
+              )})}
+            
               <form id="commentForm" action={commentAction} method="POST">
                 <textarea
                   id="commentBox"
@@ -138,5 +150,5 @@ const Posts = () => {
 //figure out how to implement jwt w/passport
 //add material ui menu (3 dots) icon that allows users to delete their own post
 //when user clicks the comment button it automatically focuses on comment box
-//blend client 2 and client1 together 
+//blend client 2 and client1 together (git branch to test and merge if works)
 export default Posts;

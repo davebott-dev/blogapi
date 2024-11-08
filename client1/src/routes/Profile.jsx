@@ -5,15 +5,12 @@ import { useOutletContext } from "react-router-dom";
 const Profile = () => {
   const [user, posts, setUser,setPosts] = useOutletContext();
   const [action, setAction] = useState("/api/profile/");
-  const [loading,setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       const response1 = await fetch("/api");
       const data1 = await response1.json();
       setUser(data1);
-      setLoading(false);
     };
     fetchData();
   }, [setUser]);

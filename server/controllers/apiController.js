@@ -31,6 +31,7 @@ module.exports= {
             likes: true,
             comments: {
                 include: {
+                    likes:true,
                     author: {
                         include: {
                             Profile:true,
@@ -172,5 +173,24 @@ module.exports= {
      }
      
         res.redirect('http://localhost:5173/profile');
+    },
+    likeComment: async(req,res)=> {
+        const id = req.user.id;
+        const commentId = req.params.commentId;
+
+        try{
+            const newLike = await prisma.commentLikes.create({
+            data: {
+                userId:id,
+                commentId:commentId,
+            }
+        })} catch(err) {
+            if(err.code==="P2002") {
+                console.log('the post has already been liked by you');
+            } else {
+                throw err;
+            }
+        }
+        res.redirect('http://localhost:5173/posts');
     }
 }

@@ -25,11 +25,11 @@ passport.use(
       },
     });
     if (!user) {
-      return done(null, false, { msg: "incorrect username" });
+      return done(null,false, {msg:'Incorrect username or password'});
     }
     const match= await bcrypt.compare(password,user.password);
     if (!match) {
-      return done(null, false, { msg: "incorrect password" });
+      return done(null,false, {msg:'Incorrect username or password'});
     }
     return done(null, user)
   } catch (err) {
@@ -66,13 +66,14 @@ router.post('/log-in', (req,res) => {
         };
       });
     }else {
-      console.log(info.msg)
-      res.redirect('http://localhost:5173/register');
+      router.get('/log-in-fail', (req,res)=> {
+        res.status(401).json({msg: info.msg})
+      });
+      res.redirect('/login');
     };
 }) (req,res)
-}
-//figure out how to display error message in the front end
-);
+});
+
 router.get('/',controller.getUser);
 router.get('/posts', controller.getPosts);
 router.post('/like/:postId',controller.like);

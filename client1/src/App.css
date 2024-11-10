@@ -247,3 +247,7 @@ footer{
 #profileForm>textarea {
   height: 150px;
 }
+#error-msg{
+  font-size: small;
+  color: red;
+}

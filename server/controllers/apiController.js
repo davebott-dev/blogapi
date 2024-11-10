@@ -192,5 +192,5 @@ module.exports= {
             }
         }
         res.redirect('http://localhost:5173/posts');
-    }
+    },
 }

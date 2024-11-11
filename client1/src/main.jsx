@@ -8,6 +8,7 @@ import Register from './routes/Register.jsx';
 import Login from './routes/Login.jsx';
 import Posts from './routes/Posts.jsx';
 import Profile from './routes/Profile.jsx';
+import Editor from './routes/Editor.jsx';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/profile',
         element:<Profile/>,
+      },
+      {
+        path: '/create',
+        element: <Editor/>,
       }
     ]
   }

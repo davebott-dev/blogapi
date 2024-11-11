@@ -14,12 +14,13 @@ const Editor = () => {
         >
           <div>
             <label htmlFor="title">Title:</label>
-            <input type="text" name="title" id="title" required />
+            <input type="text" className="create-input" name="title" id="title" required />
           </div>
 
           <div>
             <label htmlFor="file">Upload an image:</label>
             <input
+            className="create-input"
               type="file"
               name="file"
               id="file"
@@ -42,7 +43,7 @@ const Editor = () => {
             </div>
           </div>
 
-          <button type="submit">Submit</button>
+          <button className="create-input" type="submit">Submit</button>
         </form>
       ) : (
         <div className="loginMessage">

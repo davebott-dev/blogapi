@@ -12,13 +12,14 @@ const Root = () => {
         <nav>
           <div>
               <NavLink to="/">Mojos Blog</NavLink>
-              <NavLink to="posts">Posts</NavLink>
-              <NavLink to="register">Register</NavLink>
-              <NavLink to="login">Login</NavLink>
+              {user.name && <NavLink to="posts">Posts</NavLink>}
+              {!user.name ? <NavLink to="register">Register</NavLink>:null}
+              {!user.name ? <NavLink to="login">Login</NavLink>: null}
+              {user.name ? <NavLink to="create">Create a Post</NavLink>: null}
           </div>
           <div>
-          <NavLink to="profile">Profile</NavLink>
-              <a href="/api/logout">Logout</a>
+          {user.name && <NavLink to="profile">Profile</NavLink>}
+              {user.name && <a href="/api/logout">Logout</a>}
           </div>
         </nav>
         <Outlet context={[user,posts,setUser,setPosts]}/>

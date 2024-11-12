@@ -1,8 +1,9 @@
 import { Link, useOutletContext } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Avatar, IconButton } from "@mui/material";
+import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { pink } from "@mui/material/colors";
 import moment from "moment";
 
@@ -10,7 +11,17 @@ const Posts = () => {
   const [user, posts, setUser, setPosts] = useOutletContext();
   const [likeAction, setLikeAction] = useState("/api/like/");
   const [commentAction, setCommentAction] = useState("/api/comment/");
-  const [commentLikeAction, setCommentLikeAction] = useState("/api/comment/like/");
+  const [commentLikeAction, setCommentLikeAction] =
+    useState("/api/comment/like/");
+  const [anchor, setAnchor] = useState(null);
+  const open = Boolean(anchor);
+
+  const handleClick = (e) => {
+    setAnchor(e.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchor(null);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +40,12 @@ const Posts = () => {
     <>
       <div id="header">
         <div>
-          <Avatar src={user.Profile[0].picture} sx={{ width: 100, height: 100 }} />
+          <Link to="/profile">
+            <Avatar
+              src={user.Profile[0].picture}
+              sx={{ width: 100, height: 100 }}
+            />
+          </Link>
         </div>
         <div>Welcome {user.name}</div>
       </div>
@@ -44,17 +60,42 @@ const Posts = () => {
           return (
             <div key={index} className="card">
               <div>
-                <Avatar
-                  src={post.author.Profile[0].picture}
-                  sx={{ width: 75, height: 75 }}
-                />
                 <div>
-                  <div className="username">
-                    <strong>{post.author.username}</strong>
+                  <Avatar
+                    src={post.author.Profile[0].picture}
+                    sx={{ width: 75, height: 75 }}
+                  />
+                  <div>
+                    <div className="username">
+                      <strong>{post.author.username}</strong>
+                    </div>
+                    <div className="date">
+                      {moment(post.createdAt).format("MMM Do YYYY, h:mm a")}
+                    </div>
                   </div>
-                  <div className="date">
-                    {moment(post.createdAt).format("MMM Do YYYY, h:mm a")}
-                  </div>
+                </div>
+                <div>
+                  <IconButton
+                    id="basic-button"
+                    aria-controls={open ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchor}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{ "aria-labelledby": "basic-button" }}
+                  >
+                    <MenuItem onClick={handleClose}> View Profile</MenuItem>
+                    <MenuItem onClick={handleClose}>Like ♡</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete 🗑</MenuItem>
+        
+                  </Menu>
                 </div>
               </div>
               <div id="title">
@@ -81,45 +122,52 @@ const Posts = () => {
                 <div>{post.comments.length}</div>
               </div>
               {post.comments.map((comment, i) => {
-                const handleCommentLike =() => {
-                  setCommentLikeAction(commentLikeAction+comment.id);
-                }
-              return (
-                <div className="commentSection" key={i}>
-                  <div>
-                    <Avatar
-                      src={comment.author.Profile[0].picture}
-                      sx={{ width: 50, height: 50 }}
-                    />
+                const handleCommentLike = () => {
+                  setCommentLikeAction(commentLikeAction + comment.id);
+                };
+                return (
+                  <div className="commentSection" key={i}>
                     <div>
-                      <div className="username">
-                        <strong>{comment.author.username}</strong>
-                      </div>
-                      <div className="date">
-                        <em>
-                          {moment(comment.createdAt).format(
-                            "MMM Do YYYY, h:mm a"
-                          )}
-                        </em>
+                      <Avatar
+                        src={comment.author.Profile[0].picture}
+                        sx={{ width: 50, height: 50 }}
+                      />
+                      <div>
+                        <div className="username">
+                          <strong>{comment.author.username}</strong>
+                        </div>
+                        <div className="date">
+                          <em>
+                            {moment(comment.createdAt).format(
+                              "MMM Do YYYY, h:mm a"
+                            )}
+                          </em>
+                        </div>
                       </div>
                     </div>
+                    <div>{comment.content}</div>
+                    <form
+                      id="likeForm"
+                      action={commentLikeAction}
+                      method="POST"
+                    >
+                      <button id="like">
+                        <IconButton onClick={handleCommentLike}>
+                          {comment.likes.find(
+                            (like) => like.userId == user.id
+                          ) ? (
+                            <FavoriteIcon sx={{ color: pink[500] }} />
+                          ) : (
+                            <FavoriteIcon />
+                          )}
+                        </IconButton>
+                      </button>
+                      <div>{comment.likes.length}</div>
+                    </form>
                   </div>
-                  <div>{comment.content}</div>
-                  <form id="likeForm" action={commentLikeAction} method="POST">
-                  <button id="like">
-                    <IconButton onClick={handleCommentLike}>
-                      {comment.likes.find((like) => like.userId == user.id) ? (
-                        <FavoriteIcon sx={{ color: pink[500] }} />
-                      ) : (
-                        <FavoriteIcon />
-                      )}
-                    </IconButton>
-                  </button>
-                  <div>{comment.likes.length}</div>
-                </form>
-                </div>
-              )})}
-            
+                );
+              })}
+
               <form id="commentForm" action={commentAction} method="POST">
                 <textarea
                   id="commentBox"
@@ -145,10 +193,8 @@ const Posts = () => {
     </div>
   );
 };
-//conditionally show the posts tab when user logs in
-//add like funcationality to the comment section
 //figure out how to implement jwt w/passport
-//add material ui menu (3 dots) icon that allows users to delete their own post
+//figure out how to conditionally render the delete menu item 
 //when user clicks the comment button it automatically focuses on comment box
 //blend client 2 and client1 together (git branch to test and merge if works)
 export default Posts;

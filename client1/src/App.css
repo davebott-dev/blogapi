@@ -135,6 +135,7 @@ footer{
   grid-template-columns:repeat(auto-fit,minmax(750px,1fr));
   grid-gap: 40px;
   padding: 25px;
+  height: auto;
 }
 .card {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -148,6 +149,13 @@ footer{
   display: flex;
   flex-wrap: row;
   gap: 15px;
+  justify-content: space-between;
+}
+.card>div>div {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: center;
 }
 #commentForm {
   display: flex;
@@ -251,6 +259,12 @@ footer{
   font-size: small;
   color: red;
 }
+.editorContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  height: 100%;
+}
 #editorForm {
   display: flex;
   flex-direction: column;
@@ -271,4 +285,7 @@ textarea{
 }
 .create-input {
   min-width: 50%;
+}
+#header>div {
+  width: fit-content;
 }

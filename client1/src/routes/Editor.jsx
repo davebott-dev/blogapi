@@ -4,7 +4,7 @@ const Editor = () => {
   const [user] = useOutletContext();
 
   return (
-    <div className="postContainer">
+    <div className="editorContainer">
       {user.name ? (
         <form
           action="/api/upload"
@@ -59,3 +59,4 @@ const Editor = () => {
 export default Editor;
 
 //give a response when upload is successful or unsuccessful
+//work on frontend appearance in the morning

@@ -59,4 +59,3 @@ const Editor = () => {
 export default Editor;
 
 //give a response when upload is successful or unsuccessful
-//work on frontend appearance in the morning

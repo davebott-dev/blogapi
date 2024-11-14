@@ -36,6 +36,7 @@ const Posts = () => {
     fetchData();
   }, []);
   console.log(posts);
+  console.log(user)
   return user.name ? (
     <>
       <div id="header">
@@ -91,10 +92,9 @@ const Posts = () => {
                     onClose={handleClose}
                     MenuListProps={{ "aria-labelledby": "basic-button" }}
                   >
-                    <MenuItem onClick={handleClose}> View Profile</MenuItem>
+                    <MenuItem onClick={handleClose}>View Profile</MenuItem>
                     <MenuItem onClick={handleClose}>Like ♡</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete 🗑</MenuItem>
-        
+                     
                   </Menu>
                 </div>
               </div>
@@ -194,7 +194,6 @@ const Posts = () => {
   );
 };
 //figure out how to implement jwt w/passport
-//figure out how to conditionally render the delete menu item 
+//figure out how to conditionally render the delete menu item
 //when user clicks the comment button it automatically focuses on comment box
-//blend client 2 and client1 together (git branch to test and merge if works)
 export default Posts;

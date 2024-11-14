@@ -1,30 +1,41 @@
 import { Link } from "react-router-dom";
 import {useEffect,useState} from 'react';
+import {Snackbar,Alert} from '@mui/material';
 
 const Login = () => {
   const [error, setError] =useState ([]);
+  const [open, setOpen] = useState(false);
+  const [loading,setLoading] = useState(false);
+
+  const handleClick = () => {
+    error.flash.msg[error.flash.msg.length-1] =="invalid credentials" ? setOpen(true): null;
+  }
+  const handleClose =(event,reason)=> {
+    if(reason==="clickaway") {
+      return;
+    }
+    setOpen(false);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/api/log-in-fail");
-      const data = await response.json();
-      setError(data);
+      setLoading(true)
+      try{
+        const response = await fetch("/api/log-in-fail");
+        const data = await response.json();
+        setError(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
-    const handleError = () => {
-      setTimeout(()=> {
-        const newArr = error.slice(0,-1);
-        setError(newArr);
-      },3000)
-    }
     fetchData();
-    handleError();
   }, []);
-  //figure out a btter way to display errors
   return (
     <div className="formContainer">
       <form action= "api/log-in" method ="POST">
         <p>Login</p>
-        {error && <p id = "error-msg">{error.msg}</p>}
         <div>
           <span>Username</span>
           <input
@@ -47,7 +58,16 @@ const Login = () => {
           />
         </div>
 
-        <button type="submit">Submit</button>
+        <button type="submit" onClick={handleClick}>Submit</button>
+        <Snackbar
+          open={open}
+          autoHideDuration={3000}
+          onClose = {handleClose}
+        >
+          <Alert onClose={handleClose} severity = "error" variant ="filled">
+            Login Failed!
+          </Alert>
+          </Snackbar>
         <span>
           <strong>
             Don't have an account? <Link to="/register">Register here.</Link>

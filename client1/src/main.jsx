@@ -44,7 +44,7 @@ const router = createBrowserRouter([
     ]
   }
 ])
-
+//add a route param for profile so that i can include viewing others profiles based on user id
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router = {router}/>

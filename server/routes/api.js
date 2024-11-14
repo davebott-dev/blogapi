@@ -15,6 +15,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage:storage});
 const controller = require("../controllers/apiController");
+const flash = require("connect-flash");
+
+router.use(flash());
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
@@ -61,13 +64,15 @@ router.post('/log-in', (req,res) => {
         if(error) {
           res.send(error);
         } else {
-          console.log('success');
+          req.flash('success','Login successful');
           res.redirect('http://localhost:5173/posts');
         };
       });
     }else {
+      req.flash('msg', 'invalid credentials');
+      console.log(req.session)
       router.get('/log-in-fail', (req,res)=> {
-        res.status(401).json({msg: info.msg})
+        res.json(req.session)
       });
       res.redirect('/login');
     };
@@ -85,5 +90,6 @@ router.get('/logout', controller.logout);
 
 module.exports = router;
 
-//figure out how to display error message
 //implement jwt somehow 
+/* if post is selected as to be published then show in posts if not
+only display in user profile section*/

@@ -9,6 +9,7 @@ import Login from './routes/Login.jsx';
 import Posts from './routes/Posts.jsx';
 import Profile from './routes/Profile.jsx';
 import Editor from './routes/Editor.jsx';
+import View from './routes/ViewProfile.jsx';
 
 const router = createBrowserRouter([
   {
@@ -40,11 +41,14 @@ const router = createBrowserRouter([
       {
         path: '/create',
         element: <Editor/>,
+      },
+      {
+        path: '/profile/:userId',
+        element: <View/>,
       }
     ]
   }
 ])
-//add a route param for profile so that i can include viewing others profiles based on user id
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router = {router}/>

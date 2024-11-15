@@ -79,4 +79,5 @@ const Login = () => {
 };
 export default Login;
 
-//incorporate material ui features to finish frontend design
+//figure out how to render log in errors
+//incorporate jwt

@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import '../App.css';
 
@@ -18,7 +18,7 @@ const Root = () => {
               {user.name ? <NavLink to="create">Create a Post</NavLink>: null}
           </div>
           <div>
-          {user.name && <NavLink to="profile">Profile</NavLink>}
+          {user.name && <NavLink to='profile'>Profile</NavLink>}
               {user.name && <a href="/api/logout">Logout</a>}
           </div>
         </nav>

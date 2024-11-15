@@ -4,6 +4,8 @@ import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { pink } from "@mui/material/colors";
 import moment from "moment";
 
@@ -11,14 +13,12 @@ const Posts = () => {
   const [user, posts, setUser, setPosts] = useOutletContext();
   const [likeAction, setLikeAction] = useState("/api/like/");
   const [commentAction, setCommentAction] = useState("/api/comment/");
+  const [profileLink,setProfileLink] = useState('/profile/');
   const [commentLikeAction, setCommentLikeAction] =
     useState("/api/comment/like/");
   const [anchor, setAnchor] = useState(null);
   const open = Boolean(anchor);
 
-  const handleClick = (e) => {
-    setAnchor(e.currentTarget);
-  };
   const handleClose = () => {
     setAnchor(null);
   };
@@ -58,6 +58,12 @@ const Posts = () => {
           const handleComment = () => {
             setCommentAction(commentAction + post.id);
           };
+          const handleClick = (e) => {
+            setAnchor(e.currentTarget);
+
+            setProfileLink(profileLink+post.author.Profile[0].id);
+          };
+          
           return (
             <div key={index} className="card">
               <div>
@@ -92,10 +98,20 @@ const Posts = () => {
                     onClose={handleClose}
                     MenuListProps={{ "aria-labelledby": "basic-button" }}
                   >
-                    <MenuItem onClick={handleClose}>View Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>Like ♡</MenuItem>
-                     
+                    <MenuItem onClick={handleClose}>
+                    <Link to={profileLink}>View Profile</Link>
+                    </MenuItem>
                   </Menu>
+                  {user.id == post.author.id ? <IconButton>
+                    <form action="#" method="POST">
+                      <button className="hidden">
+                      <DeleteIcon/>
+                      </button>
+                    </form>
+                   
+                  </IconButton> :
+                  null
+                  }
                 </div>
               </div>
               <div id="title">
@@ -194,6 +210,6 @@ const Posts = () => {
   );
 };
 //figure out how to implement jwt w/passport
-//figure out how to conditionally render the delete menu item
 //when user clicks the comment button it automatically focuses on comment box
+//create delete route to delete user posts
 export default Posts;

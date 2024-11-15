@@ -193,4 +193,23 @@ module.exports= {
         }
         res.redirect('http://localhost:5173/posts');
     },
+        getProfile: async(req,res) => {
+        const id = req.params.userId;
+
+        const findProfile = await prisma.profile.findFirst({
+            where: {
+                id,
+            },
+            include:{
+                user: {
+                    include: {
+                        posts: true,
+                        Comment:true,
+                    }
+                }
+                
+            }
+        });
+        res.json(findProfile);
+    }
 }

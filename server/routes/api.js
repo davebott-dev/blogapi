@@ -80,11 +80,12 @@ router.post('/log-in', (req,res) => {
 });
 
 router.get('/',controller.getUser);
+router.get('/profile/:userId', controller.getProfile);
 router.get('/posts', controller.getPosts);
 router.post('/like/:postId',controller.like);
 router.post('/comment/like/:commentId',controller.likeComment);
 router.post('/comment/:postId',controller.comment);
-router.post('/profile/:userId',upload.single('file'),controller.updateProfile);
+router.post('/profile',upload.single('file'),controller.updateProfile);
 router.post('/upload',upload.single('file'),controller.upload);
 router.get('/logout', controller.logout);
 

@@ -156,7 +156,7 @@ footer{
   flex-direction: row;
   gap: 15px;
   align-items: center;
-}
+  }
 #commentForm {
   display: flex;
   flex-direction: column;
@@ -288,4 +288,12 @@ textarea{
 }
 #header>div {
   width: fit-content;
+}
+hr {
+  width: 100%;
+  border-width: 2px;
+}
+.hidden {
+  background: none;
+  color: gray;
 }

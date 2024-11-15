@@ -59,3 +59,4 @@ const Editor = () => {
 export default Editor;
 
 //give a response when upload is successful or unsuccessful
+//add loading state

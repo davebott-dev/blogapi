@@ -211,5 +211,26 @@ module.exports= {
             }
         });
         res.json(findProfile);
+    },
+    delete: async(req,res) => {
+        const id = req.params.postId;
+
+        const deletePost = await prisma.post.delete({
+            where: {
+                id,
+            }
+        });
+        res.redirect('http://localhost:5173/posts');
+    },
+    deleteUser: async(req,res) => {
+        const id = req.params.userId;
+
+        const deleteUser = await prisma.user.delete({
+            where: {
+                id,
+            }
+        });
+        
+        res.redirect('http://localhost:5173/');
     }
 }

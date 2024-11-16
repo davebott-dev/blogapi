@@ -1,5 +1,5 @@
 import { Link, useOutletContext } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -16,13 +16,15 @@ const Posts = () => {
   const [profileLink,setProfileLink] = useState('/profile/');
   const [commentLikeAction, setCommentLikeAction] =
     useState("/api/comment/like/");
+  const [deleteAction, setDeleteAction]= useState('/api/delete/');
   const [anchor, setAnchor] = useState(null);
+  const inputRef = useRef(null);
   const open = Boolean(anchor);
 
+  console.log(inputRef)
   const handleClose = () => {
     setAnchor(null);
   };
-
   useEffect(() => {
     const fetchData = async () => {
       const response1 = await fetch("/api");
@@ -60,10 +62,11 @@ const Posts = () => {
           };
           const handleClick = (e) => {
             setAnchor(e.currentTarget);
-
             setProfileLink(profileLink+post.author.Profile[0].id);
           };
-          
+          const handleDelete = () => {
+            setDeleteAction(deleteAction+post.id);
+          }
           return (
             <div key={index} className="card">
               <div>
@@ -103,8 +106,8 @@ const Posts = () => {
                     </MenuItem>
                   </Menu>
                   {user.id == post.author.id ? <IconButton>
-                    <form action="#" method="POST">
-                      <button className="hidden">
+                    <form action={deleteAction} method="POST">
+                      <button className="hidden" onClick={handleDelete}>
                       <DeleteIcon/>
                       </button>
                     </form>
@@ -132,7 +135,7 @@ const Posts = () => {
                   </button>
                   <div>{post.likes.length}</div>
                 </form>
-                <IconButton>
+                <IconButton onClick={()=> inputRef.current.focus() }>
                   <CommentIcon />
                 </IconButton>
                 <div>{post.comments.length}</div>
@@ -189,6 +192,7 @@ const Posts = () => {
                   id="commentBox"
                   name="comment"
                   defaultValue="Leave a comment"
+                  ref ={inputRef}
                 ></textarea>
                 <button onClick={handleComment} id="commentBtn">
                   Comment
@@ -210,6 +214,5 @@ const Posts = () => {
   );
 };
 //figure out how to implement jwt w/passport
-//when user clicks the comment button it automatically focuses on comment box
-//create delete route to delete user posts
+//figure out how to focus for each post
 export default Posts;

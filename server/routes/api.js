@@ -83,6 +83,8 @@ router.get('/',controller.getUser);
 router.get('/profile/:userId', controller.getProfile);
 router.get('/posts', controller.getPosts);
 router.post('/like/:postId',controller.like);
+router.post('/delete/:postId',controller.delete);
+router.post('/profile/delete/:userId', controller.deleteUser);
 router.post('/comment/like/:commentId',controller.likeComment);
 router.post('/comment/:postId',controller.comment);
 router.post('/profile',upload.single('file'),controller.updateProfile);

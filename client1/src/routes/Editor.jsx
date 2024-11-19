@@ -1,4 +1,5 @@
 import { Link, useOutletContext } from "react-router-dom";
+import {useState} from 'react';
 
 const Editor = () => {
   const [user] = useOutletContext();
@@ -30,20 +31,7 @@ const Editor = () => {
          
           <textarea name="content" defaultValue="type here" />
           
-          <span>Do you want this post to be visible to the public?</span>
-
-          <div>
-            <div>
-              <input type="radio" id="radio1" name="isPublished" value="Yes" />
-              <label htmlFor="checkbox1">Yes</label>
-            </div>
-            <div>
-              <input type="radio" id="radio2" name="isPublished" value="No" />
-              <label htmlFor="checkbox1">No</label>
-            </div>
-          </div>
-
-          <button className="create-input" type="submit">Submit</button>
+            <button className="create-input" type="submit" >Submit</button>
         </form>
       ) : (
         <div className="loginMessage">
@@ -57,6 +45,3 @@ const Editor = () => {
 };
 
 export default Editor;
-
-//give a response when upload is successful or unsuccessful
-//add loading state

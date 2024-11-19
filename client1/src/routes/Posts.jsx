@@ -18,7 +18,7 @@ const Posts = () => {
     useState("/api/comment/like/");
   const [deleteAction, setDeleteAction]= useState('/api/delete/');
   const [anchor, setAnchor] = useState(null);
-  const inputRef = useRef(null);
+  const inputRef = useRef([]);
   const open = Boolean(anchor);
 
   console.log(inputRef)
@@ -135,7 +135,7 @@ const Posts = () => {
                   </button>
                   <div>{post.likes.length}</div>
                 </form>
-                <IconButton onClick={()=> inputRef.current.focus() }>
+                <IconButton onClick={()=> inputRef.current[index].focus() }>
                   <CommentIcon />
                 </IconButton>
                 <div>{post.comments.length}</div>
@@ -191,8 +191,8 @@ const Posts = () => {
                 <textarea
                   id="commentBox"
                   name="comment"
-                  defaultValue="Leave a comment"
-                  ref ={inputRef}
+                  placeholder="Leave a comment"
+                  ref ={(el)=> (inputRef.current[index]=el)}
                 ></textarea>
                 <button onClick={handleComment} id="commentBtn">
                   Comment
@@ -213,6 +213,4 @@ const Posts = () => {
     </div>
   );
 };
-//figure out how to implement jwt w/passport
-//figure out how to focus for each post
 export default Posts;

@@ -79,8 +79,6 @@ module.exports= {
         const user = req.user.id;
         const title = req.body.title;
         const content = req.body.content;
-        let isPublished=null;
-        req.body.isPublished =="Yes" ? isPublished=true : isPublished=false;
         const imgUpload = await cloudinary.uploader.upload(req.file.path, {
             transformation: [
                 {
@@ -94,7 +92,6 @@ module.exports= {
             data:{
                 title:title,
                 content:content,
-                published: isPublished,
                 data: url,
                 authorId: user,             
             }

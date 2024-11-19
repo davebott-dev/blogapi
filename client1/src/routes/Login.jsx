@@ -78,6 +78,3 @@ const Login = () => {
   );
 };
 export default Login;
-
-//figure out how to render log in errors
-//incorporate jwt

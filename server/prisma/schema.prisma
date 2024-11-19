@@ -39,7 +39,6 @@ model Post {
   createdAt DateTime  @default(now())
   title     String    @db.VarChar(255)
   content   String?
-  published Boolean   @default(false)
   data      String?
   author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String

@@ -93,6 +93,5 @@ router.get('/logout', controller.logout);
 
 module.exports = router;
 
-//implement jwt somehow 
-/* if post is selected as to be published then show in posts if not
-only display in user profile section*/
+//install passport-jwt and configure the strategy 
+//create a git branch when testing 

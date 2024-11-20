@@ -2,6 +2,7 @@ require('dotenv').config();
 const {PrismaClient}= require('@prisma/client');
 const prisma = new PrismaClient();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken'); 
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
@@ -71,9 +72,13 @@ module.exports= {
                         }
                     }
                 });
-                res.redirect('http://localhost:5173/login');
+                const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET, {expiresIn: '1h'});
+                res.send({
+                    success: true,
+                    token,
+                })
             }
-        })
+        }) 
     },
     upload: async(req,res)=> {
         const user = req.user.id;

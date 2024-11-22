@@ -21,6 +21,7 @@ const Posts = () => {
   const inputRef = useRef([]);
   const open = Boolean(anchor);
 
+
   console.log(inputRef)
   const handleClose = () => {
     setAnchor(null);

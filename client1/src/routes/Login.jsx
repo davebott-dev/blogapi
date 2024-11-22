@@ -1,15 +1,13 @@
-import { Link } from "react-router-dom";
-import {useEffect,useState} from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import {useState} from 'react';
 import {Snackbar,Alert} from '@mui/material';
 
 const Login = () => {
-  const [error, setError] =useState ([]);
+  const [error, setError] =useState (null);
   const [open, setOpen] = useState(false);
   const [loading,setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleClick = () => {
-    error.flash.msg[error.flash.msg.length-1] =="invalid credentials" ? setOpen(true): null;
-  }
   const handleClose =(event,reason)=> {
     if(reason==="clickaway") {
       return;
@@ -17,24 +15,50 @@ const Login = () => {
     setOpen(false);
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      try{
-        const response = await fetch("/api/log-in-fail");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+  
+    setLoading(true);
+    
+    try {
+      const response = await fetch('http://localhost:8080/api/log-in', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+  
+      if(response.ok) {
         const data = await response.json();
-        setError(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+        console.log('Response from server:', data); 
+    
+        if (data.success) {
+          localStorage.setItem('authToken', data.token);
+          navigate('/posts');
+        } else {
+          setError(data.msg || 'Login failed');
+          setOpen(true);
+        }
+      } else {
+        const errorData = await response.text();
+        console.error(errorData);
       }
-    };
-    fetchData();
-  }, []);
+    } catch (err) {
+      console.error('Error during login:', err);
+      setError("An error occurred while logging in. Please try again.");
+      setOpen(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+//now that this works make other routes protected
+
   return (
     <div className="formContainer">
-      <form action= "api/log-in" method ="POST">
+      <form onSubmit={handleSubmit}>
         <p>Login</p>
         <div>
           <span>Username</span>
@@ -58,14 +82,14 @@ const Login = () => {
           />
         </div>
 
-        <button type="submit" onClick={handleClick}>Submit</button>
+        <button type="submit" disabled={loading}>{loading? 'logging in...': 'Submit'}</button>
         <Snackbar
           open={open}
           autoHideDuration={3000}
           onClose = {handleClose}
         >
           <Alert onClose={handleClose} severity = "error" variant ="filled">
-            Login Failed!
+            {error}
           </Alert>
           </Snackbar>
         <span>

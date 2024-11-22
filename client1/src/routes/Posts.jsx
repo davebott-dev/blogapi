@@ -1,11 +1,10 @@
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useNavigate,useOutletContext} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import { pink } from "@mui/material/colors";
 import moment from "moment";
 
@@ -20,26 +19,47 @@ const Posts = () => {
   const [anchor, setAnchor] = useState(null);
   const inputRef = useRef([]);
   const open = Boolean(anchor);
+  const navigate = useNavigate();
 
+  const token = localStorage.getItem("authToken");
 
-  console.log(inputRef)
   const handleClose = () => {
     setAnchor(null);
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      const response1 = await fetch("/api");
-      const data1 = await response1.json();
-      setUser(data1);
 
-      const response2 = await fetch("/api/posts");
-      const data2 = await response2.json();
-      setPosts(data2);
-    };
-    fetchData();
-  }, []);
+  useEffect(() => {
+    if(!token) {
+      navigate('/login');
+    } else {
+      const fetchData = async() => {
+        const response1 = await fetch("http://localhost:8080/api", {
+          mode:'no-cors',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const data1 = await response1.json();
+        setUser(data1);
+
+        const response2 = await fetch('http://localhost:8080/api/posts', {
+          mode:'no-cors',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const data2 = await response2.json();
+        setPosts(data2);
+      };
+      fetchData();
+    }
+  }, [token,navigate]);
   console.log(posts);
   console.log(user)
+
+  if(!user) {
+    return <div>Loading...</div>
+  }
+
   return user.name ? (
     <>
       <div id="header">

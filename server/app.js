@@ -3,8 +3,10 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
+const passport = require('passport');
 const apiRoute = require('./routes/api');
 
+app.use(passport.initialize());
 app.use(cors());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());

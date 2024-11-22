@@ -14,17 +14,18 @@ cloudinary.config({
 
 module.exports= {
     getUser: async(req,res) => {
-        const user = await prisma.user.findFirst({
-            where: {
-                id:req.user.id,
-            },
-            include: {
-                posts: true,
-                Profile: true,
-                Likes:true,
-            }
-        });
-        res.json(user);
+        console.log(req.user)
+        // const user = await prisma.user.findFirst({
+        //     where: {
+        //         id:req.user.userId,
+        //     },
+        //     include: {
+        //         posts: true,
+        //         Profile: true,
+        //         Likes:true,
+        //     }
+        // });
+        // res.json(user);
     },
     getPosts: async(req,res)=> {
             const posts = await prisma.post.findMany({

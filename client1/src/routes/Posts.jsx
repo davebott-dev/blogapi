@@ -33,7 +33,6 @@ const Posts = () => {
     } else {
       const fetchData = async() => {
         const response1 = await fetch("http://localhost:8080/api", {
-          mode:'no-cors',
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -42,7 +41,6 @@ const Posts = () => {
         setUser(data1);
 
         const response2 = await fetch('http://localhost:8080/api/posts', {
-          mode:'no-cors',
           headers: {
             'Authorization': `Bearer ${token}`,
           },

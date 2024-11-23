@@ -1,13 +1,19 @@
-require('dotenv').config();
 const express = require("express");
+const passport = require("passport");
 const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const passport = require("passport");
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const controller = require("../controllers/apiController");
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+
+
+const opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET,
+};
 const multer = require('multer');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -15,16 +21,8 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-const controller = require("../controllers/apiController");
-const flash = require("connect-flash");
-router.use(flash());
 
-const opts = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
-};
-//figure out how to log in and display protected routes
-passport.use(opts, async (jwtPayload, done) => {
+passport.use(new JwtStrategy (opts, async (jwtPayload, done) => {
   console.log(jwtPayload);
   try {
     const user = await prisma.user.findFirst({
@@ -40,7 +38,7 @@ passport.use(opts, async (jwtPayload, done) => {
   } catch (err) {
     return done(err, false);
   }
-});
+}));
 
 router.post("/", controller.createUser);
 router.post("/log-in", (req, res) => {
@@ -93,6 +91,6 @@ router.post("/comment/like/:commentId",passport.authenticate('jwt', {session:fal
 router.post("/comment/:postId", passport.authenticate('jwt', {session:false}),controller.comment);
 router.post("/profile",passport.authenticate('jwt', {session:false}), upload.single("file"), controller.updateProfile);
 router.post("/upload",passport.authenticate('jwt', {session:false}), upload.single("file"), controller.upload);
-router.get("/logout",passport.authenticate('jwt', {session:false}), controller.logout);
+router.get("/logout", controller.logout);
 
 module.exports = router;

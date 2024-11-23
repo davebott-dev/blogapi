@@ -14,18 +14,17 @@ cloudinary.config({
 
 module.exports= {
     getUser: async(req,res) => {
-        console.log(req.user)
-        // const user = await prisma.user.findFirst({
-        //     where: {
-        //         id:req.user.userId,
-        //     },
-        //     include: {
-        //         posts: true,
-        //         Profile: true,
-        //         Likes:true,
-        //     }
-        // });
-        // res.json(user);
+        const user = await prisma.user.findFirst({
+            where: {
+                id:req.user.userId,
+            },
+            include: {
+                posts: true,
+                Profile: true,
+                Likes:true,
+            }
+        });
+        res.json(user);
     },
     getPosts: async(req,res)=> {
             const posts = await prisma.post.findMany({
@@ -108,12 +107,7 @@ module.exports= {
     
     },
     logout: async(req,res) => {
-        req.logout((err)=> {
-            if(err) {
-                return next(err);
-            }
-            res.redirect('http://localhost:5173')
-        })
+        res.json({success:true, msg:'logged out successful'})
     },
     like: async(req,res)=> {
         const id = req.user.id;
@@ -128,11 +122,13 @@ module.exports= {
         })} catch(err) {
             if(err.code==="P2002") {
                 console.log('the post has already been liked by you');
+                return res.status(400).json({success:false, msg:"you already liked this post"})
             } else {
-                throw err;
+                console.error(err);
+                return res.status(500).json({success:false,msg:"An error occured"})
             }
         }
-        res.redirect('http://localhost:5173/posts');
+        res.json({success:true, msg:"post liked successfully"});
     },
     comment: async(req,res)=> {
         const postId = req.params.postId;
@@ -237,3 +233,4 @@ module.exports= {
         res.redirect('http://localhost:5173/');
     }
 }
+//fix all the controllers to handle jwt the optimize code functionality

@@ -1,10 +1,10 @@
-import { Link, useNavigate,useOutletContext} from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { pink } from "@mui/material/colors";
 import moment from "moment";
 
@@ -12,10 +12,10 @@ const Posts = () => {
   const [user, posts, setUser, setPosts] = useOutletContext();
   const [likeAction, setLikeAction] = useState("/api/like/");
   const [commentAction, setCommentAction] = useState("/api/comment/");
-  const [profileLink,setProfileLink] = useState('/profile/');
+  const [profileLink, setProfileLink] = useState("/profile/");
   const [commentLikeAction, setCommentLikeAction] =
     useState("/api/comment/like/");
-  const [deleteAction, setDeleteAction]= useState('/api/delete/');
+  const [deleteAction, setDeleteAction] = useState("/api/delete/");
   const [anchor, setAnchor] = useState(null);
   const inputRef = useRef([]);
   const open = Boolean(anchor);
@@ -28,21 +28,21 @@ const Posts = () => {
   };
 
   useEffect(() => {
-    if(!token) {
-      navigate('/login');
+    if (!token) {
+      navigate("/login");
     } else {
-      const fetchData = async() => {
+      const fetchData = async () => {
         const response1 = await fetch("http://localhost:8080/api", {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         const data1 = await response1.json();
         setUser(data1);
 
-        const response2 = await fetch('http://localhost:8080/api/posts', {
+        const response2 = await fetch("http://localhost:8080/api/posts", {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         const data2 = await response2.json();
@@ -50,12 +50,10 @@ const Posts = () => {
       };
       fetchData();
     }
-  }, [token,navigate]);
-  console.log(posts);
-  console.log(user)
+  }, [token, navigate]);
 
-  if(!user) {
-    return <div>Loading...</div>
+  if (!user) {
+    return <div>Loading...</div>;
   }
 
   return user.name ? (
@@ -73,19 +71,40 @@ const Posts = () => {
       </div>
       <div className="postContainer">
         {posts.map((post, index) => {
-          const handleLike = () => {
-            setLikeAction(likeAction + post.id);
+          const handleLike = async (e) => {
+            e.preventDefault();
+
+            try {
+              const response = await fetch(likeAction + post.id, {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              const data = await response.json();
+              if (response.ok) {
+                if (data.success) {
+                  console.log("liked", data);
+                  window.location.reload();
+                }
+              }
+            } catch (err) {
+              console.error("Error during like:", err);
+            } finally {
+              navigate("/posts");
+            }
           };
+
           const handleComment = () => {
             setCommentAction(commentAction + post.id);
           };
           const handleClick = (e) => {
             setAnchor(e.currentTarget);
-            setProfileLink(profileLink+post.author.Profile[0].id);
+            setProfileLink(profileLink + post.author.Profile[0].id);
           };
           const handleDelete = () => {
-            setDeleteAction(deleteAction+post.id);
-          }
+            setDeleteAction(deleteAction + post.id);
+          };
           return (
             <div key={index} className="card">
               <div>
@@ -121,19 +140,18 @@ const Posts = () => {
                     MenuListProps={{ "aria-labelledby": "basic-button" }}
                   >
                     <MenuItem onClick={handleClose}>
-                    <Link to={profileLink}>View Profile</Link>
+                      <Link to={profileLink}>View Profile</Link>
                     </MenuItem>
                   </Menu>
-                  {user.id == post.author.id ? <IconButton>
-                    <form action={deleteAction} method="POST">
-                      <button className="hidden" onClick={handleDelete}>
-                      <DeleteIcon/>
-                      </button>
-                    </form>
-                   
-                  </IconButton> :
-                  null
-                  }
+                  {user.id == post.author.id ? (
+                    <IconButton>
+                      <form action={deleteAction} method="POST">
+                        <button className="hidden" onClick={handleDelete}>
+                          <DeleteIcon />
+                        </button>
+                      </form>
+                    </IconButton>
+                  ) : null}
                 </div>
               </div>
               <div id="title">
@@ -154,7 +172,7 @@ const Posts = () => {
                   </button>
                   <div>{post.likes.length}</div>
                 </form>
-                <IconButton onClick={()=> inputRef.current[index].focus() }>
+                <IconButton onClick={() => inputRef.current[index].focus()}>
                   <CommentIcon />
                 </IconButton>
                 <div>{post.comments.length}</div>
@@ -211,7 +229,7 @@ const Posts = () => {
                   id="commentBox"
                   name="comment"
                   placeholder="Leave a comment"
-                  ref ={(el)=> (inputRef.current[index]=el)}
+                  ref={(el) => (inputRef.current[index] = el)}
                 ></textarea>
                 <button onClick={handleComment} id="commentBtn">
                   Comment
@@ -233,3 +251,5 @@ const Posts = () => {
   );
 };
 export default Posts;
+
+//finishing updating the routes to handle jwt

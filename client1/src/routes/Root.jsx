@@ -7,6 +7,11 @@ const Root = () => {
   const [user, setUser] = useState([]);
   const [posts, setPosts] = useState([]);
 
+  const handleLogout =()=> {
+    localStorage.removeItem("authToken");
+    window.location.reload();
+  }
+
   return (
     <div className= "rootContainer">
         <nav>
@@ -19,7 +24,7 @@ const Root = () => {
           </div>
           <div>
           {user.name && <NavLink to='profile'>Profile</NavLink>}
-              {user.name && <a href="/api/logout">Logout</a>}
+              {user.name && <NavLink onClick ={handleLogout}>Logout</NavLink>}
           </div>
         </nav>
         <Outlet context={[user,posts,setUser,setPosts]}/>

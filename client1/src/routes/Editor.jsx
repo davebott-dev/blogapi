@@ -1,37 +1,106 @@
-import { Link, useOutletContext } from "react-router-dom";
-import {useState} from 'react';
+import { Link, useOutletContext, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const Editor = () => {
-  const [user] = useOutletContext();
+  const [user, posts, setUser, setPosts] = useOutletContext();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      const fetchData = async () => {
+        const response = await fetch("http://localhost:8080/api", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        setUser(data);
+      };
+      fetchData();
+    }
+  }, [token, navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const title = e.target.title.value;
+    const file = e.target.file.files[0];
+    const content = e.target.content.value;
+
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("file", file);
+    formData.append("content", content);
+
+    try {
+      const response = await fetch("http://localhost:8080/api/upload", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.success) {
+          console.log("Post Uploaded", data);
+          navigate("/posts");
+        } else {
+          setError(data.msg || "upload failed");
+        }
+      } else {
+        setError("An error occured while uploading. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error during form submission:", err);
+      setError(
+        "An error occurred while submitting the form. Please try again."
+      );
+    } finally {
+      setLoading(false);
+      navigate("/posts");
+    }
+  };
 
   return (
     <div className="editorContainer">
       {user.name ? (
-        <form
-          action="/api/upload"
-          method="POST"
-          encType="multipart/form-data"
-          id="editorForm"
-        >
+        <form id="editorForm" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="title">Title:</label>
-            <input type="text" className="create-input" name="title" id="title" required />
+            <input
+              type="text"
+              className="create-input"
+              name="title"
+              id="title"
+              required
+            />
           </div>
 
           <div>
             <label htmlFor="file">Upload an image:</label>
             <input
-            className="create-input"
+              className="create-input"
               type="file"
               name="file"
               id="file"
               accept=" image/*"
             />
           </div>
-         
+
           <textarea name="content" defaultValue="type here" />
-          
-            <button className="create-input" type="submit" >Submit</button>
+
+          <button className="create-input" type="submit" disabled={loading}> 
+            {loading ? "Uploading..." : "Submit"}
+          </button>
         </form>
       ) : (
         <div className="loginMessage">

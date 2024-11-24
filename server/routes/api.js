@@ -23,7 +23,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 passport.use(new JwtStrategy (opts, async (jwtPayload, done) => {
-  console.log(jwtPayload);
   try {
     const user = await prisma.user.findFirst({
       where: {
@@ -41,12 +40,15 @@ passport.use(new JwtStrategy (opts, async (jwtPayload, done) => {
 }));
 
 router.post("/", controller.createUser);
-router.post("/log-in", (req, res) => {
-  const { username, password } = req.body;
-
-  prisma.user
-    .findUnique({ where: { username } })
-    .then(async (user) => {
+router.post("/log-in", async (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  try{
+  const user = await prisma.user.findFirst({
+     where: {
+       username, 
+      }, 
+    }); 
       if (!user) {
         return res.status(400).json({
           success: false,
@@ -65,20 +67,19 @@ router.post("/log-in", (req, res) => {
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
-
       res.json({
         success: true,
         token,
       });
-    })
-    .catch((err) => {
+  
+    } catch(err) {
       console.error(err);
-      res.status(500).json({ success: false, msg: "Server error" });
-    });
+      res.status(500).json({success:false, msg: "server error"});
+    }
 });
 
 router.get("/", passport.authenticate('jwt', {session:false}), controller.getUser);
-router.get("/profile/:userId",passport.authenticate('jwt', {session:false}), controller.getProfile);
+router.get("/profile",passport.authenticate('jwt', {session:false}), controller.getProfile);
 router.get(
   "/posts",
   passport.authenticate("jwt", { session: false }),
@@ -89,8 +90,7 @@ router.post("/delete/:postId", passport.authenticate('jwt', {session:false}),con
 router.post("/profile/delete/:userId", passport.authenticate('jwt', {session:false}),controller.deleteUser);
 router.post("/comment/like/:commentId",passport.authenticate('jwt', {session:false}), controller.likeComment);
 router.post("/comment/:postId", passport.authenticate('jwt', {session:false}),controller.comment);
-router.post("/profile",passport.authenticate('jwt', {session:false}), upload.single("file"), controller.updateProfile);
+router.post("/profile/:userId",passport.authenticate('jwt', {session:false}), upload.single("file"), controller.updateProfile);
 router.post("/upload",passport.authenticate('jwt', {session:false}), upload.single("file"), controller.upload);
-router.get("/logout", controller.logout);
 
 module.exports = router;

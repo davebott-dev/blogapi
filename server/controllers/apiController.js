@@ -16,7 +16,7 @@ module.exports= {
     getUser: async(req,res) => {
         const user = await prisma.user.findFirst({
             where: {
-                id:req.user.userId,
+                id:req.user.id,
             },
             include: {
                 posts: true,
@@ -73,9 +73,10 @@ module.exports= {
                     }
                 });
                 const token = jwt.sign({userId: newUser.id}, process.env.JWT_SECRET, {expiresIn: '1h'});
-                res.send({
-                    success: true,
-                    token,
+                res.json({
+                    success:true,
+                    token:token,
+                    msg: "user created successfully"
                 })
             }
         }) 
@@ -105,9 +106,6 @@ module.exports= {
         
         res.redirect('http://localhost:5173/posts');
     
-    },
-    logout: async(req,res) => {
-        res.json({success:true, msg:'logged out successful'})
     },
     like: async(req,res)=> {
         const id = req.user.id;

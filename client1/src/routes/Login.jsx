@@ -30,12 +30,11 @@ const Login = () => {
         },
         body: JSON.stringify({ username, password }),
       });
-  
       if(response.ok) {
         const data = await response.json();
         console.log('Response from server:', data); 
-    
         if (data.success) {
+          localStorage.removeItem('authToken');
           localStorage.setItem('authToken', data.token);
           navigate('/posts');
         } else {
@@ -54,7 +53,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-//now that this works make other routes protected
 
   return (
     <div className="formContainer">

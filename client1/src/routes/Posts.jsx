@@ -52,6 +52,8 @@ const Posts = () => {
     }
   }, [token, navigate]);
 
+  console.log(posts)
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -83,10 +85,8 @@ const Posts = () => {
               });
               const data = await response.json();
               if (response.ok) {
-                if (data.success) {
                   console.log("liked", data);
                   window.location.reload();
-                }
               }
             } catch (err) {
               console.error("Error during like:", err);
@@ -95,15 +95,53 @@ const Posts = () => {
             }
           };
 
-          const handleComment = () => {
-            setCommentAction(commentAction + post.id);
+          const handleComment = async(e) => {
+            e.preventDefault();
+            const comment = e.target.comment.value;
+
+            try{
+              const response = await fetch(commentAction+post.id, {
+                method:"POST",
+                headers:{
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body:JSON.stringify({comment}),
+              });
+              const data = await response.json();
+                console.log("comment",data);
+              
+            } catch(err){
+              console.error("error during commenting",err)
+            } finally {
+              window.location.reload();
+            }
           };
           const handleClick = (e) => {
             setAnchor(e.currentTarget);
             setProfileLink(profileLink + post.author.Profile[0].id);
           };
-          const handleDelete = () => {
-            setDeleteAction(deleteAction + post.id);
+          const handleDelete = async(e) => {
+            e.preventDefault();
+
+            try{
+              const response = await fetch (deleteAction+post.id, {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              const data = await response.json();
+              if(response.ok) {
+                console.log("deleted",data);
+              }
+            } catch(err) {
+              console.error("error during delete",err);
+            } finally {
+              window.location.reload();
+            }
+
+
           };
           return (
             <div key={index} className="card">
@@ -178,8 +216,26 @@ const Posts = () => {
                 <div>{post.comments.length}</div>
               </div>
               {post.comments.map((comment, i) => {
-                const handleCommentLike = () => {
-                  setCommentLikeAction(commentLikeAction + comment.id);
+                const handleCommentLike = async(e) => {
+                  e.preventDefault();
+
+                  try{
+                    const response = await fetch(commentLikeAction + comment.id, {
+                      method: "POST",
+                      headers:{
+                        Authorization: `Bearer ${token}`,
+                      },
+                    });
+                    const data = await response.json();
+                    if(data.ok) {
+                      console.log("commentLike",data);
+                    }
+                  } catch(err) {
+                    console.error("error in liking", err);
+                  }finally {
+                    window.location.reload();
+                  }
+                  
                 };
                 return (
                   <div className="commentSection" key={i}>
@@ -224,14 +280,14 @@ const Posts = () => {
                 );
               })}
 
-              <form id="commentForm" action={commentAction} method="POST">
+              <form id="commentForm" onSubmit={handleComment}>
                 <textarea
                   id="commentBox"
                   name="comment"
                   placeholder="Leave a comment"
                   ref={(el) => (inputRef.current[index] = el)}
                 ></textarea>
-                <button onClick={handleComment} id="commentBtn">
+                <button id="commentBtn">
                   Comment
                 </button>
               </form>

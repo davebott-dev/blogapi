@@ -5,10 +5,15 @@ import { Avatar } from "@mui/material";
 const View = () => {
   const [data, setData] = useState();
   const userId = useParams();
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`/api/profile/${userId.userId}`);
+      const response = await fetch(`/api/profile/${userId.userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       const data = await response.json();
       setData(data);
     };

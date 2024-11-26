@@ -79,7 +79,7 @@ router.post("/log-in", async (req, res) => {
 });
 
 router.get("/", passport.authenticate('jwt', {session:false}), controller.getUser);
-router.get("/profile",passport.authenticate('jwt', {session:false}), controller.getProfile);
+router.get("/profile/:userId",passport.authenticate('jwt', {session:false}), controller.getProfile);
 router.get(
   "/posts",
   passport.authenticate("jwt", { session: false }),

@@ -86,9 +86,16 @@ const Login = () => {
           autoHideDuration={3000}
           onClose = {handleClose}
         >
+          {error? 
           <Alert onClose={handleClose} severity = "error" variant ="filled">
-            {error}
-          </Alert>
+          {error}
+        </Alert>
+        :
+        <Alert onClose={handleClose} severity = "success" variant ="filled">
+          Post successful
+        </Alert>
+        }
+          
           </Snackbar>
         <span>
           <strong>

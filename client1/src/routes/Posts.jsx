@@ -10,12 +10,12 @@ import moment from "moment";
 
 const Posts = () => {
   const [user, posts, setUser, setPosts] = useOutletContext();
-  const [likeAction, setLikeAction] = useState("/api/like/");
-  const [commentAction, setCommentAction] = useState("/api/comment/");
+  const [likeAction] = useState("/api/like/");
+  const [commentAction] = useState("/api/comment/");
   const [profileLink, setProfileLink] = useState("/profile/");
-  const [commentLikeAction, setCommentLikeAction] =
+  const [commentLikeAction] =
     useState("/api/comment/like/");
-  const [deleteAction, setDeleteAction] = useState("/api/delete/");
+  const [deleteAction] = useState("/api/delete/");
   const [anchor, setAnchor] = useState(null);
   const inputRef = useRef([]);
   const open = Boolean(anchor);
@@ -307,5 +307,3 @@ const Posts = () => {
   );
 };
 export default Posts;
-
-//finishing updating the routes to handle jwt

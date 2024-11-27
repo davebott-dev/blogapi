@@ -1,1 +1,3 @@
 # Client 1 - 
+
+This is the frontend of the application. It is built using reactjs...

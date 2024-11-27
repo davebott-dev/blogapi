@@ -1,12 +1,22 @@
 import { Link, useOutletContext, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import {Snackbar,Alert} from '@mui/material';
+
 
 const Editor = () => {
   const [user, posts, setUser, setPosts] = useOutletContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [open,setOpen] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
+
+  const handleClose =(event,reason)=> {
+    if(reason==="clickaway") {
+      return;
+    }
+    setOpen(false);
+  }
 
   useEffect(() => {
     if (!token) {
@@ -50,20 +60,19 @@ const Editor = () => {
       const data = await response.json();
 
       if (response.ok) {
-        if (data.success) {
           console.log("Post Uploaded", data);
           navigate("/posts");
-        } else {
-          setError(data.msg || "upload failed");
-        }
+
       } else {
         setError("An error occured while uploading. Please try again.");
+        setOpen(true);
       }
     } catch (err) {
       console.error("Error during form submission:", err);
       setError(
         "An error occurred while submitting the form. Please try again."
       );
+      setOpen(true);
     } finally {
       setLoading(false);
       navigate("/posts");
@@ -101,6 +110,15 @@ const Editor = () => {
           <button className="create-input" type="submit" disabled={loading}> 
             {loading ? "Uploading..." : "Submit"}
           </button>
+          <Snackbar
+          open={open}
+          autoHideDuration={3000}
+          onClose = {handleClose}
+        >
+          <Alert onClose={handleClose} severity = "error" variant ="filled">
+            {error}
+          </Alert>
+          </Snackbar>
         </form>
       ) : (
         <div className="loginMessage">

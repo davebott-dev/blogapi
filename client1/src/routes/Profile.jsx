@@ -8,8 +8,8 @@ const Profile = () => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [action, setAction] = useState("http://localhost:8080/api/profile/");
-  const [deleteAction, setDeleteAction] = useState("/api/profile/delete/");
+  const [action] = useState("http://localhost:8080/api/profile/");
+  const [deleteAction] = useState("/api/profile/delete/");
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
   const handleClose = (event, reason) => {
